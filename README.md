@@ -8,7 +8,7 @@ DEVELOPMENT TEAM:
 | B032310196   | KING SOON KIT  |
 | B032310257   | MUHAMMAD ARIF AIMAN |
 | B032310645   | SHOMESWARAN A/L MUGUNTHAN |
-| row 4   | row 4 |
+| B032310805   | BOO JIA JUN |
 | row 5   | row 5 |
 | row 6   | row 6 |
 
