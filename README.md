@@ -28,7 +28,7 @@ DEVELOPMENT TEAM:
 - Can export their own marks to Google Sheets
 
 ### 3️⃣ Backend Application (REST API)
-- Built using Spring Boot or Node.js
+- Built using PHP library
 - Connects to MySQL database
 - Provides endpoints for:
   - Mark submission
