@@ -36,7 +36,7 @@ CREATE TABLE `mark` (
   CONSTRAINT `mark_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `student` (`studentID`),
   CONSTRAINT `mark_ibfk_2` FOREIGN KEY (`subjectID`) REFERENCES `subject` (`subjectID`),
   CONSTRAINT `mark_ibfk_3` FOREIGN KEY (`teacherID`) REFERENCES `teacher` (`teacherID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +61,7 @@ CREATE TABLE `student` (
   `class` varchar(30) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`studentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,7 +84,7 @@ CREATE TABLE `subject` (
   `subjectID` varchar(50) NOT NULL,
   `subjectName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`subjectID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,7 +107,7 @@ CREATE TABLE `teacher` (
   `teacherID` varchar(50) NOT NULL,
   `teacherName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`teacherID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
