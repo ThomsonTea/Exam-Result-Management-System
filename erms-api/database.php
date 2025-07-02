@@ -1,7 +1,7 @@
 <?php
 
 $db_host = "localhost";
-$db_name = "erms_db"; 
+$db_name = "erms_db_v1"; 
 $db_user = "root";
 $db_pass = "";
 
