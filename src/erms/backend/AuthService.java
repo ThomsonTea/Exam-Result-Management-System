@@ -8,18 +8,19 @@ import org.json.JSONObject;
 
 public class AuthService {
 
-    private static final String API_BASE_URL = "http://localhost/erms-api";
+    private static final String API_BASE_URL = "http://localhost/Exam-Result-Management-System/erms-api";
     private final HttpClient client = HttpClient.newHttpClient();
 
-    public boolean login(String username, String password) throws ApiException {
+    public JSONObject login(String userid, String password, String role) throws ApiException {
         // Create a JSON object for the request body
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("username", username);
+        jsonBody.put("userid", userid);
         jsonBody.put("password", password);
+        jsonBody.put("role", role);
 
         // Build the HTTP request
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_BASE_URL + "/student/login.php"))
+                .uri(URI.create(API_BASE_URL + "/authentication.php"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
                 .build();
@@ -27,14 +28,16 @@ public class AuthService {
         try {
             // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            
+            System.out.println("Login response status: " + response.statusCode());
+            System.out.println("Response body: " + response.body());
+            
+            JSONObject responseJson = new JSONObject(response.body());
 
             // Check the HTTP status code from the server
             if (response.statusCode() == 200) {
-                return true;
+            	return responseJson;
             } else {
-                // Any other status code is a failure.
-                // We parse the error message from the JSON response and throw our custom exception.
-                JSONObject responseJson = new JSONObject(response.body());
                 String errorMessage = responseJson.optString("message", "An unknown server error occurred.");
                 throw new ApiException(errorMessage);
             }
