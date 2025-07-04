@@ -75,7 +75,7 @@ public class StudentMainMenu extends JPanel {
         // Button Actions
         btnViewMark.addActionListener((ActionEvent e) -> cardLayout.show(contentPanel, "Mark/GradeView"));
         btnCheckSubjects.addActionListener((ActionEvent e) -> {
-        	checkSubjectPanel.reload(); // refresh the table
+//        	checkSubjectPanel.reload(); // refresh the table
             cardLayout.show(contentPanel, "CheckEnrolledSubjects");
         });
 

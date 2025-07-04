@@ -164,40 +164,40 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         });
 
         // Initial data load
-        reload();
+//        reload();
     }
 
-    public void reload() {
-        try {
-            tableModel.setRowCount(0);
-            subjectFilter.removeAllItems();
-            subjectFilter.addItem("All");
-            
-            JSONObject requestData = new JSONObject();
-            requestData.put("studentID", this.studentID);
-            
-            JSONArray subjectsDataArray = StudentService.fetchEnrolledSubjects(requestData);
-
-            Set<String> subjects = new HashSet<>();
-
-            for (int i = 0; i < subjectsDataArray.length(); i++) {
-                JSONObject row = subjectsDataArray.getJSONObject(i);
-                String subjectIDValue = row.getString("subjectID");
-                String subjectName = row.getString("subjectName");
-
-                Object score = row.has("score") ? row.getInt("score") : "N/A";
-                String grade = row.optString("grade", "N/A");
-                String tID = row.getString("teacherID");
-
-                tableModel.addRow(new Object[]{subjectIDValue, subjectName, score, grade, tID});
-                subjects.add(subjectIDValue);
-            }
-
-            subjects.stream().sorted().forEach(subjectFilter::addItem);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load marks: " + e.getMessage());
-        }
-    }
+//    public void reload() {
+//        try {
+//            tableModel.setRowCount(0);
+//            subjectFilter.removeAllItems();
+//            subjectFilter.addItem("All");
+//            
+//            JSONObject requestData = new JSONObject();
+//            requestData.put("studentID", this.studentID);
+//            
+//            JSONArray subjectsDataArray = StudentService.fetchEnrolledSubjects(requestData);
+//
+//            Set<String> subjects = new HashSet<>();
+//
+//            for (int i = 0; i < subjectsDataArray.length(); i++) {
+//                JSONObject row = subjectsDataArray.getJSONObject(i);
+//                String subjectIDValue = row.getString("subjectID");
+//                String subjectName = row.getString("subjectName");
+//
+//                Object score = row.has("score") ? row.getInt("score") : "N/A";
+//                String grade = row.optString("grade", "N/A");
+//                String tID = row.getString("teacherID");
+//
+//                tableModel.addRow(new Object[]{subjectIDValue, subjectName, score, grade, tID});
+//                subjects.add(subjectIDValue);
+//            }
+//
+//            subjects.stream().sorted().forEach(subjectFilter::addItem);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Failed to load marks: " + e.getMessage());
+//        }
+//    }
 }
