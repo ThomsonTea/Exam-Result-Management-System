@@ -1,22 +1,22 @@
-package erms.teacher;
+package erms.student;
 
 import erms.MainApp;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class TeacherMainMenu extends JPanel {
+public class StudentMainMenu extends JPanel {
 
-    private CardLayout cardLayout;
+	private static final long serialVersionUID = 1L;
+	private CardLayout cardLayout;
     private JPanel contentPanel;
-    private TeacherCheckGrade checkGradePanel; // <-- Add this at class level
 
-    private final String teacherID;
-    private final String teacherName;
+    private final String studentID;
+    private final String studentName;
 
-    public TeacherMainMenu(String id, String name) {
-        this.teacherID = (id != null) ? id : "";
-        this.teacherName = (name != null) ? name : "";
+    public StudentMainMenu(String id, String name) {
+        this.studentID = (id != null) ? id : "";
+        this.studentName = (name != null) ? name : "";
 
         setLayout(new BorderLayout());
 
@@ -25,7 +25,7 @@ public class TeacherMainMenu extends JPanel {
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         headerPanel.setBackground(new Color(70, 130, 180));
 
-        JLabel userLabel = new JLabel("Logged in as: " + teacherID + " - " + teacherName);
+        JLabel userLabel = new JLabel("Logged in as: " + studentID + " - " + studentName);
         userLabel.setForeground(Color.WHITE);
         userLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
@@ -40,44 +40,43 @@ public class TeacherMainMenu extends JPanel {
         headerPanel.add(logoutButton, BorderLayout.EAST);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Navigation Buttons Panel
         JPanel navPanel = new JPanel();
         navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.Y_AXIS));
         navPanel.setPreferredSize(new Dimension(160, getHeight())); // Fixed width for nav
         navPanel.setBorder(BorderFactory.createEmptyBorder(30, 10, 30, 10));
 
-        JButton btnMarkEntry = new JButton("Enter Student Marks");
-        JButton btnCheckGrades = new JButton("Check Grades");
+        JButton btnViewMark = new JButton("View Marks/Grades");
+        JButton btnCheckSubjects = new JButton("Check Subjects");
 
-        btnMarkEntry.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCheckGrades.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnMarkEntry.setFont(new Font("Segoe UI", Font.PLAIN, 11)); // Smaller font
-        btnCheckGrades.setFont(new Font("Segoe UI", Font.PLAIN, 11)); // Smaller font
-        btnMarkEntry.setMaximumSize(new Dimension(180, 40));
-        btnCheckGrades.setMaximumSize(new Dimension(180, 40));
+        btnViewMark.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnCheckSubjects.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnViewMark.setFont(new Font("Segoe UI", Font.PLAIN, 11)); // Smaller font
+        btnCheckSubjects.setFont(new Font("Segoe UI", Font.PLAIN, 11)); // Smaller font
+        btnViewMark.setMaximumSize(new Dimension(180, 40));
+        btnCheckSubjects.setMaximumSize(new Dimension(180, 40));
 
-        navPanel.add(btnMarkEntry);
+        navPanel.add(btnViewMark);
         navPanel.add(Box.createVerticalStrut(20)); // spacing
-        navPanel.add(btnCheckGrades);
+        navPanel.add(btnCheckSubjects);
         add(navPanel, BorderLayout.WEST);
 
         // Content Panel
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
 
-        TeacherMarkEntryPanel markEntryPanel = new TeacherMarkEntryPanel(teacherID);
-        TeacherCheckGrade checkGradePanel = new TeacherCheckGrade(teacherID);
+        StudentViewMarkPanel viewMarkPanel = new StudentViewMarkPanel(studentID, studentName);
+        StudentCheckEnrolledSubjects checkSubjectPanel = new StudentCheckEnrolledSubjects(studentID);
 
-        contentPanel.add(markEntryPanel, "MarkEntry");
-        contentPanel.add(checkGradePanel, "CheckGrade");
+        contentPanel.add(viewMarkPanel, "Mark/GradeView");
+        contentPanel.add(checkSubjectPanel, "CheckEnrolledSubjects");
 
         add(contentPanel, BorderLayout.CENTER); // takes the remaining ~65-75%
         
         // Button Actions
-        btnMarkEntry.addActionListener((ActionEvent e) -> cardLayout.show(contentPanel, "MarkEntry"));
-        btnCheckGrades.addActionListener((ActionEvent e) -> {
-            checkGradePanel.reload(); // refresh the table
-            cardLayout.show(contentPanel, "CheckGrade");
+        btnViewMark.addActionListener((ActionEvent e) -> cardLayout.show(contentPanel, "Mark/GradeView"));
+        btnCheckSubjects.addActionListener((ActionEvent e) -> {
+        	checkSubjectPanel.reload(); // refresh the table
+            cardLayout.show(contentPanel, "CheckEnrolledSubjects");
         });
 
 
@@ -92,11 +91,11 @@ public class TeacherMainMenu extends JPanel {
     // Optional for testing standalone
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Teacher Menu");
+            JFrame frame = new JFrame("Student Menu");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(900, 500);
             frame.setLocationRelativeTo(null);
-            frame.setContentPane(new TeacherMainMenu("T001", "Example Teacher"));
+            frame.setContentPane(new StudentMainMenu("B032310000", "Example Student"));
             frame.setVisible(true);
         });
     }

@@ -11,7 +11,11 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 
 public class TeacherMarkEntryPanel extends JPanel {
-    private JComboBox<String> studentDropdown, subjectDropdown;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JComboBox<String> studentDropdown, subjectDropdown;
     private String teacherID;
 
     public TeacherMarkEntryPanel(String teacherID) {
@@ -57,7 +61,16 @@ public class TeacherMarkEntryPanel extends JPanel {
         formPanel.add(createRow("Grade (Auto):", gradeField));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        JButton submitBtn = button("Submit & Export to Google Sheets", new Color(30, 144, 255));
+        JButton submitBtn = new JButton("Submit & Export to Google Sheets");
+        submitBtn.setBorderPainted(false);
+        submitBtn.setOpaque(true);
+        submitBtn.setBackground(new Color(30, 144, 255));
+        submitBtn.setForeground(Color.WHITE);
+        submitBtn.setFocusPainted(false);
+        
+        Dimension buttonSize = new Dimension(200, 40);
+        submitBtn.setPreferredSize(buttonSize);
+        
         buttonPanel.add(submitBtn);
         buttonPanel.setOpaque(false);
 
@@ -106,6 +119,8 @@ public class TeacherMarkEntryPanel extends JPanel {
             data.put("teacherID", teacherID);
             data.put("score", Integer.parseInt(score));
             data.put("grade", grade);
+            
+            System.out.print("data: " + data);
 
             try {
                 boolean result = TeacherService.submitMark(data);

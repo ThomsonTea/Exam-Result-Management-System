@@ -2,6 +2,7 @@ package erms;
 import erms.backend.ApiException;
 
 import erms.backend.AuthService;
+import erms.student.StudentMainMenu;
 import erms.teacher.TeacherMainMenu;
 
 import javax.swing.*;
@@ -15,6 +16,12 @@ public class MainApp {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+        	try {
+                // Set a modern Look and Feel
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             new MainApp().showLoginUI();
         });
     }
@@ -110,10 +117,8 @@ public class MainApp {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
-
-        JPanel studentPanel = new JPanel();
-        studentPanel.add(new JLabel("Welcome to the Student View (Placeholder)"));
-        frame.setContentPane(studentPanel);
+        frame.setContentPane(new StudentMainMenu(id, name));
+        frame.setVisible(true);
 
         frame.setVisible(true);
     }
