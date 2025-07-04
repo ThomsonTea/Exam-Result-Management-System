@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jul 02, 2025 at 08:20 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Jul 04, 2025 at 03:04 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.2.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,12 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `mark` (
-  `markID` int(11) NOT NULL,
-  `studentID` varchar(50) DEFAULT NULL,
-  `subjectID` varchar(50) DEFAULT NULL,
-  `teacherID` varchar(50) DEFAULT NULL,
-  `score` int(11) DEFAULT NULL,
-  `grade` varchar(2) DEFAULT NULL
+  `markID` int NOT NULL,
+  `studentID` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `subjectID` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `teacherID` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `score` int DEFAULT NULL,
+  `grade` varchar(2) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -41,11 +41,14 @@ CREATE TABLE `mark` (
 --
 
 INSERT INTO `mark` (`markID`, `studentID`, `subjectID`, `teacherID`, `score`, `grade`) VALUES
-(1, 'B032310805', ' BITP 2223', 'T001', 88, 'A'),
-(2, 'B032310011', ' BITP 2223', 'T001', 90, 'A'),
-(3, 'B032310012', ' BITP 3123', 'T003', 55, 'D'),
+(1, 'B032310805', 'BITP 2223', 'T001', 88, 'A'),
+(2, 'B032310011', 'BITP 2223', 'T001', 90, 'A'),
+(3, 'B032310012', 'BITP 3123', 'T003', 55, 'D'),
 (4, 'B032310068', 'BITP 3453 ', 'T003', 77, 'B'),
-(5, 'B032310002', ' BITP 3123', 'T003', 92, 'A');
+(5, 'B032310002', 'BITP 3123', 'T003', 92, 'A'),
+(6, 'B032310002', 'BITP 2223', 'T001', 87, 'A'),
+(8, 'B032310135', 'BITP 2223', 'T001', 85, 'A'),
+(9, 'B032310108', 'BITP 2223', 'T001', 77, 'B');
 
 -- --------------------------------------------------------
 
@@ -54,10 +57,10 @@ INSERT INTO `mark` (`markID`, `studentID`, `subjectID`, `teacherID`, `score`, `g
 --
 
 CREATE TABLE `student` (
-  `studentID` varchar(50) NOT NULL,
-  `studentName` varchar(255) DEFAULT NULL,
-  `class` varchar(30) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL
+  `studentID` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `studentName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `class` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -131,9 +134,9 @@ INSERT INTO `student` (`studentID`, `studentName`, `class`, `password`) VALUES
 --
 
 CREATE TABLE `subject` (
-  `subjectID` varchar(50) NOT NULL,
-  `subjectName` varchar(255) DEFAULT NULL,
-  `teacherID` varchar(50) NOT NULL
+  `subjectID` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `subjectName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `teacherID` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -141,9 +144,9 @@ CREATE TABLE `subject` (
 --
 
 INSERT INTO `subject` (`subjectID`, `subjectName`, `teacherID`) VALUES
-(' BITP 2223', 'Software Requirement and Design', 'T001'),
-(' BITP 3123', ' Distributed Application Development', 'T003'),
-(' BITP 3253', ' Software Validation and Verification', 'T002'),
+('BITP 2223', 'Software Requirement and Design', 'T001'),
+('BITP 3123', ' Distributed Application Development', 'T003'),
+('BITP 3253', ' Software Validation and Verification', 'T002'),
 ('BITP 3453 ', 'Mobile Application Development', 'T003');
 
 -- --------------------------------------------------------
@@ -153,9 +156,9 @@ INSERT INTO `subject` (`subjectID`, `subjectName`, `teacherID`) VALUES
 --
 
 CREATE TABLE `teacher` (
-  `teacherID` varchar(50) NOT NULL,
-  `teacherName` varchar(255) DEFAULT NULL,
-  `password` varchar(255) NOT NULL
+  `teacherID` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `teacherName` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -207,7 +210,7 @@ ALTER TABLE `teacher`
 -- AUTO_INCREMENT for table `mark`
 --
 ALTER TABLE `mark`
-  MODIFY `markID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `markID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
@@ -218,7 +221,7 @@ ALTER TABLE `mark`
 --
 ALTER TABLE `mark`
   ADD CONSTRAINT `mark_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `student` (`studentID`),
-  ADD CONSTRAINT `mark_ibfk_2` FOREIGN KEY (`subjectID`) REFERENCES `subject` (`subjectID`),
+  ADD CONSTRAINT `mark_ibfk_2` FOREIGN KEY (`subjectID`) REFERENCES `subject` (`subjectID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `mark_ibfk_3` FOREIGN KEY (`teacherID`) REFERENCES `teacher` (`teacherID`);
 COMMIT;
 
