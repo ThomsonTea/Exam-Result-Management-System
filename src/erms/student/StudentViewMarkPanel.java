@@ -68,71 +68,66 @@ public class StudentViewMarkPanel extends JPanel {
         return formContainer;
     }
 
-//    /**
-//     * Fetches the subjects the student is enrolled in and populates the dropdown.
-//     * This method now correctly constructs the JSON object required by the backend service.
-//     */
-//    private void fetchSubjectsMarks() {
-//        try {
-//            JSONObject requestData = new JSONObject();
-//
-//            requestData.put("studentID", this.studentID);
-//
-//            JSONArray subjects = StudentService.fetchSubjects(requestData);
-//
-//            for (int i = 0; i < subjects.length(); i++) {
-//                JSONObject subject = subjects.getJSONObject(i);
-//                String display = subject.getString("subjectID") + " - " + subject.getString("subjectName");
-//                subjectDropdown.addItem(display);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace(); 
-//            JOptionPane.showMessageDialog(this, "Failed to fetch subject list: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
-//
-//    /**
-//     * Called when a subject is selected. Fetches the corresponding mark and updates the text fields.
-//     */
-//    private void fetchAndDisplayMark() {
-//        String selectedSubject = (String) subjectDropdown.getSelectedItem();
-//        if (selectedSubject == null || selectedSubject.isEmpty()) {
-//            scoreField.setText("");
-//            gradeField.setText("");
-//            return;
-//        }
-//
-//        String subjectID = selectedSubject.split(" - ")[0].trim();
-//
-//        try {
-//            JSONObject requestData = new JSONObject();
-//
-//            requestData.put("studentID", this.studentID);
-//            requestData.put("subjectID", subjectID);
-//            
-//            System.out.print("requestData:" + requestData + "\n");
-//            
-//            JSONArray markDataArray = StudentService.fetchMarks(requestData);
-//
-//            if (markDataArray.length() > 0) {
-//                JSONObject markObject = markDataArray.getJSONObject(0);
-//
-//                int score = markObject.getInt("score");
-//                String grade = markObject.getString("grade");
-//
-//                scoreField.setText(String.valueOf(score));
-//                gradeField.setText(grade);
-//            } else {
-//                scoreField.setText("Not Marked Yet");
-//                gradeField.setText("N/A");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(this, "⚠️ Could not fetch mark: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//            scoreField.setText("Error");
-//            gradeField.setText("Error");
-//        }
-//    }
+     // Fetches the subjects the student is enrolled in and populates the dropdown.
+    private void fetchSubjectsMarks() {
+        try {
+            JSONObject requestData = new JSONObject();
+
+            requestData.put("studentID", this.studentID);
+
+            JSONArray subjects = StudentService.fetchSubjects(requestData);
+
+            for (int i = 0; i < subjects.length(); i++) {
+                JSONObject subject = subjects.getJSONObject(i);
+                String display = subject.getString("subjectID") + " - " + subject.getString("subjectName");
+                subjectDropdown.addItem(display);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            JOptionPane.showMessageDialog(this, "Failed to fetch subject list: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+     // Called when a subject is selected. Fetches the corresponding mark and updates the text fields.
+    private void fetchAndDisplayMark() {
+        String selectedSubject = (String) subjectDropdown.getSelectedItem();
+        if (selectedSubject == null || selectedSubject.isEmpty()) {
+            scoreField.setText("");
+            gradeField.setText("");
+            return;
+        }
+
+        String subjectID = selectedSubject.split(" - ")[0].trim();
+
+        try {
+            JSONObject requestData = new JSONObject();
+
+            requestData.put("studentID", this.studentID);
+            requestData.put("subjectID", subjectID);
+            
+            System.out.print("requestData:" + requestData + "\n");
+            
+            JSONArray markDataArray = StudentService.fetchMarks(requestData);
+
+            if (markDataArray.length() > 0) {
+                JSONObject markObject = markDataArray.getJSONObject(0);
+
+                int score = markObject.getInt("score");
+                String grade = markObject.getString("grade");
+
+                scoreField.setText(String.valueOf(score));
+                gradeField.setText(grade);
+            } else {
+                scoreField.setText("Not Marked Yet");
+                gradeField.setText("N/A");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "⚠️ Could not fetch mark: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            scoreField.setText("Error");
+            gradeField.setText("Error");
+        }
+    }
 
     private JPanel createRow(String labelText, JComponent input) {
         JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));

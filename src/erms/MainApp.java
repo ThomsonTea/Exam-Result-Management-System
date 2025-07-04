@@ -16,12 +16,12 @@ public class MainApp {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-        	try {
-                // Set a modern Look and Feel
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//        	try {
+//                // Set a modern Look and Feel
+//                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
             new MainApp().showLoginUI();
         });
     }
