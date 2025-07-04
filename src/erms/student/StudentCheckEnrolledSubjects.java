@@ -43,12 +43,12 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         JButton submitBtn = new JButton("Export to Google Sheets");
         submitBtn.setBorderPainted(false);
-//        submitBtn.setOpaque(true);
+        submitBtn.setOpaque(true);
         submitBtn.setBackground(new Color(21, 115, 71));
         submitBtn.setForeground(Color.WHITE);
-//        submitBtn.setFocusPainted(false);
+        submitBtn.setFocusPainted(false);
         submitBtn.setFont(new Font("Arial", Font.BOLD, 12));
-//        submitBtn.setPreferredSize(new Dimension(220, 35));
+        submitBtn.setPreferredSize(new Dimension(220, 35));
         buttonPanel.add(submitBtn);
 
         controlsPanel.add(filterPanel, BorderLayout.WEST);
@@ -84,6 +84,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         }
 
         // export to google sheets
+     // export to google sheets
         submitBtn.addActionListener(e -> {
             submitBtn.setEnabled(false);
             submitBtn.setText("Exporting, please wait...");

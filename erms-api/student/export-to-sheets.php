@@ -1,4 +1,6 @@
 <?php
+// export-to-sheets.php
+
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
@@ -14,13 +16,14 @@ try {
     }
     
     $sheetPayload = json_encode(["data" => $dataArray]);
-    echo "Payload to be sent to Google Sheets: " . $sheetPayload . "\n";
+    echo "Payload to be sent to Google Sheets: " . $sheetPayload . "\n"; // Debugging line
     
     $googleScriptUrl = "https://script.google.com/macros/s/AKfycbz-XXN58u7kvHmmA0rH9axl9C0QShmoyX73Le0Lz0N1knvy98JlsMO2I_GebkF0ChRQ/exec";
     
     $ch = curl_init($googleScriptUrl); 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     
+    // --- THE FIX IS HERE ---
     // Tell cURL to automatically follow any redirects sent by the Google server.
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
     
