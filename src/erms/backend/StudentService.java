@@ -69,10 +69,8 @@ public class StudentService {
 	}
 
 
-    /**
-     * Fetches the specific mark for a student in a given subject.
-     * In a real app, this would query the 'marks' table in the database.
-     */
+    
+     // Fetches the specific mark for a student in a given subject.
     public static JSONArray fetchMarks(JSONObject data) throws Exception {
     	URL url = new URL(API_BASE + "/Student/fetch-subject-mark.php");
 	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -103,6 +101,7 @@ public class StudentService {
 	    return new JSONArray(response.toString());
     }
     
+    // Fetch all subjects that are enrolled by current student
     public static JSONArray fetchEnrolledSubjects(JSONObject data) throws Exception {
     	URL url = new URL(API_BASE + "/Student/fetch-enrolled-subjects.php");
 	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();

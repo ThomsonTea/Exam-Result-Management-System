@@ -68,10 +68,7 @@ public class StudentViewMarkPanel extends JPanel {
         return formContainer;
     }
 
-    /**
-     * Fetches the subjects the student is enrolled in and populates the dropdown.
-     * This method now correctly constructs the JSON object required by the backend service.
-     */
+     // Fetches the subjects the student is enrolled in and populates the dropdown.
     private void fetchSubjectsMarks() {
         try {
             JSONObject requestData = new JSONObject();
@@ -91,9 +88,7 @@ public class StudentViewMarkPanel extends JPanel {
         }
     }
 
-    /**
-     * Called when a subject is selected. Fetches the corresponding mark and updates the text fields.
-     */
+     // Called when a subject is selected. Fetches the corresponding mark and updates the text fields.
     private void fetchAndDisplayMark() {
         String selectedSubject = (String) subjectDropdown.getSelectedItem();
         if (selectedSubject == null || selectedSubject.isEmpty()) {
