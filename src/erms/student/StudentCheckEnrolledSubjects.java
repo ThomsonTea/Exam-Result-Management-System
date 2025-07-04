@@ -43,12 +43,12 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         JButton submitBtn = new JButton("Export to Google Sheets");
         submitBtn.setBorderPainted(false);
-        submitBtn.setOpaque(true);
+//        submitBtn.setOpaque(true);
         submitBtn.setBackground(new Color(21, 115, 71));
         submitBtn.setForeground(Color.WHITE);
-        submitBtn.setFocusPainted(false);
+//        submitBtn.setFocusPainted(false);
         submitBtn.setFont(new Font("Arial", Font.BOLD, 12));
-        submitBtn.setPreferredSize(new Dimension(220, 35));
+//        submitBtn.setPreferredSize(new Dimension(220, 35));
         buttonPanel.add(submitBtn);
 
         controlsPanel.add(filterPanel, BorderLayout.WEST);
@@ -84,7 +84,6 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         }
 
         // export to google sheets
-     // export to google sheets
         submitBtn.addActionListener(e -> {
             submitBtn.setEnabled(false);
             submitBtn.setText("Exporting, please wait...");
@@ -164,40 +163,40 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         });
 
         // Initial data load
-//        reload();
+        reload();
     }
 
-//    public void reload() {
-//        try {
-//            tableModel.setRowCount(0);
-//            subjectFilter.removeAllItems();
-//            subjectFilter.addItem("All");
-//            
-//            JSONObject requestData = new JSONObject();
-//            requestData.put("studentID", this.studentID);
-//            
-//            JSONArray subjectsDataArray = StudentService.fetchEnrolledSubjects(requestData);
-//
-//            Set<String> subjects = new HashSet<>();
-//
-//            for (int i = 0; i < subjectsDataArray.length(); i++) {
-//                JSONObject row = subjectsDataArray.getJSONObject(i);
-//                String subjectIDValue = row.getString("subjectID");
-//                String subjectName = row.getString("subjectName");
-//
-//                Object score = row.has("score") ? row.getInt("score") : "N/A";
-//                String grade = row.optString("grade", "N/A");
-//                String tID = row.getString("teacherID");
-//
-//                tableModel.addRow(new Object[]{subjectIDValue, subjectName, score, grade, tID});
-//                subjects.add(subjectIDValue);
-//            }
-//
-//            subjects.stream().sorted().forEach(subjectFilter::addItem);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(this, "Failed to load marks: " + e.getMessage());
-//        }
-//    }
+    public void reload() {
+        try {
+            tableModel.setRowCount(0);
+            subjectFilter.removeAllItems();
+            subjectFilter.addItem("All");
+            
+            JSONObject requestData = new JSONObject();
+            requestData.put("studentID", this.studentID);
+            
+            JSONArray subjectsDataArray = StudentService.fetchEnrolledSubjects(requestData);
+
+            Set<String> subjects = new HashSet<>();
+
+            for (int i = 0; i < subjectsDataArray.length(); i++) {
+                JSONObject row = subjectsDataArray.getJSONObject(i);
+                String subjectIDValue = row.getString("subjectID");
+                String subjectName = row.getString("subjectName");
+
+                Object score = row.has("score") ? row.getInt("score") : "N/A";
+                String grade = row.optString("grade", "N/A");
+                String tID = row.getString("teacherID");
+
+                tableModel.addRow(new Object[]{subjectIDValue, subjectName, score, grade, tID});
+                subjects.add(subjectIDValue);
+            }
+
+            subjects.stream().sorted().forEach(subjectFilter::addItem);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load marks: " + e.getMessage());
+        }
+    }
 }
