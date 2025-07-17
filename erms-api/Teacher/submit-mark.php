@@ -28,14 +28,20 @@ try {
     $stmt->execute();
 
     // ---- Google Sheet API Export (optional) ----
-    $sheetData = [
-        [$data->studentID, $data->subjectID, $data->teacherID, $data->score, $data->grade]
-    ];
+	$sheetData = [
+	    [
+	        "studentID" => $data->studentID,
+	        "subjectID" => $data->subjectID,
+	        "teacherID" => $data->teacherID,
+	        "score"     => $data->score,
+	        "grade"     => $data->grade
+	    ]
+	];
 
     $sheetPayload = json_encode(["data" => $sheetData]);
 
-    // Replace with your url get from Google sheet apps script (current one is boo jia jun's url)
-    $ch = curl_init("https://script.google.com/macros/s/AKfycbwu9K8nAxZbrXSdjIHU8Y8leQh9CIaMvWr1GO3zO-WMTMIUDrBJoe52sV1i80qeU0aDoQ/exec"); 
+    // Replace with your url get from Google sheet apps script
+    $ch = curl_init("https://script.google.com/macros/s/AKfycbzvBR0r5W0ri6gGzdT8JEORCy1Lr_uIdLT2JXmi3XX_n1mLpYwrlZvDHrqTm2odw4hTzQ/exec"); 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $sheetPayload);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
