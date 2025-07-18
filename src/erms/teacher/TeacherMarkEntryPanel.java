@@ -127,7 +127,7 @@ public class TeacherMarkEntryPanel extends JPanel {
                 if (result) {
                     JOptionPane.showMessageDialog(this, "✅ Mark submitted successfully.");
                 } else {
-                    JOptionPane.showMessageDialog(this, "❌ Submission failed.");
+                    JOptionPane.showMessageDialog(this, "❌ Submission failed. The student might already have a mark for this subject.");
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
