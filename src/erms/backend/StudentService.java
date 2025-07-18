@@ -14,23 +14,29 @@ public class StudentService {
 	
 	// export data to sheets
 	public static boolean exportDataToSheets(JSONArray data) throws Exception {
-		System.out.print("data:" + data.toString(2)); //pretty json format
-		
-	    URL url = new URL(API_BASE + "/Student/export-to-sheets.php"); 
+	    // Wrap data array inside a parent object with key "data"
+	    JSONObject payload = new JSONObject();
+	    payload.put("data", data);
+
+	    System.out.print("Sending JSON payload:\n" + payload.toString(2));
+
+	    URL url = new URL(API_BASE + "/Student/export-to-sheets.php");
 	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	    conn.setRequestMethod("POST");
-	    conn.setRequestProperty("Content-Type", "application/json");
+	    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 	    conn.setDoOutput(true);
 
 	    try (OutputStream os = conn.getOutputStream()) {
-	        os.write(data.toString().getBytes("UTF-8"));
+	        os.write(payload.toString().getBytes("UTF-8")); // Send wrapped object
 	        os.flush();
 	    }
 
 	    int responseCode = conn.getResponseCode();
-	    System.out.print("\nerror code:" + responseCode);
+	    System.out.println("Export response code: " + responseCode);
+
 	    return responseCode == 200;
 	}
+
 
 	
 	// fetch enrolled subjects for "View Marks/Grades" dropdown.
