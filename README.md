@@ -81,8 +81,10 @@ We integrate our software with the Google Sheets API to enable teachers and stud
 ## Backend Application
 
 ### Technology Stack
-- Java
-- etc
+Language - Java
+Networking - HttpURLConnection, HttpClient
+JSON Processing	- org.json (for JSON parsing)
+Web Server - PHP-based backend (API hosted in /erms-api/)
 
 ## API Documentation
 1) List of All API endpoints.
@@ -91,6 +93,80 @@ We integrate our software with the Google Sheets API to enable teachers and stud
 4) Example success and error responses (with status code and JSON example). - use Postman
 5) Security - Detail the security measures implemented. Explain the choice of mechanism and describe how it protects the endpoint.
 
+1. login
+API endpoint: http://localhost/Exam-Result-Management-System/erms-api//authentication.php
+HTTP method: POST
+Header: Content-Type - application/json
+
+Body:
+{
+  "userid": "B032310523",
+  "password": "12345678",
+  "role": "student"
+}
+
+Success response:
+Status Code: 200 OK
+{
+    "message": "Login successful.",
+    "id": "B032310523",
+    "name": "HARIS A/L R SURESH"
+}
+
+Error response:
+Status Code: 401 Unauthorized
+{
+    "message": "Invalid ID or password2."
+}
+
+Status Code: 400 Bad Request
+{
+    "message": "User ID, password, and role are required."
+}
+
+2. exportDataToSheets
+API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/export-to-sheets.php
+HTTP method: POST
+Header: Content-Type - application/json
+
+Body:
+{
+ 
+}
+
+Success response:
+Status Code: 
+{
+   
+}
+
+Error response:
+Status Code: 
+{
+
+}
+
+2. exportDataToSheets
+API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects-marks.php
+HTTP method: POST
+Header: Content-Type - application/json
+
+Body:
+{
+ 
+}
+
+Success response:
+Status Code: 
+{
+   
+}
+
+Error response:
+Status Code: 
+{
+
+}
 ## Frontend Applications
 
 For each of the two frontend apps:
