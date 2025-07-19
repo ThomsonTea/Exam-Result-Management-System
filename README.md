@@ -86,13 +86,6 @@ Networking - HttpURLConnection, HttpClient
 JSON Processing	- org.json (for JSON parsing)
 Web Server - PHP-based backend (API hosted in /erms-api/)
 
-## API Documentation
-1) List of All API endpoints.
-2) HTTP method for each endpoint.
-3) Required request parameters, headers, and body formats (with JSON examples). - use Postman
-4) Example success and error responses (with status code and JSON example). - use Postman
-5) Security - Detail the security measures implemented. Explain the choice of mechanism and describe how it protects the endpoint.
-
 ## 1. login
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api//authentication.php
   HTTP method: POST
@@ -340,6 +333,10 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
   Success response:
   Status Code: 200 OK
 
+  ## Implemented Security Measures:
+  - Authentication is handled via a centralized login endpoint (/authentication.php).
+  - User role-based access via the role field (student, teacher) in the login request.
+  - JSON Payloads only; content-type is explicitly set to application/json.
   
 ## Frontend Applications
 
