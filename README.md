@@ -77,6 +77,7 @@ We integrate our software with the Google Sheets API to enable teachers and stud
 ## System Architecture
 
 ### High-Level Diagram
+<img width="841" height="661" alt="HighLevelDAD1 drawio" src="https://github.com/user-attachments/assets/fd49d9a4-89f8-4d77-85d5-63763da06f5a" />
 
 ## Backend Application
 
@@ -395,7 +396,8 @@ API Integration
 ## Database Design
 
 ### Entity-Relationship Diagram (ERD)
-A diagram showing the database tables, their columns (with data types), and the relationships between them (one-to-one, one-to-many).
+![WhatsApp Image 2025-06-29 at 10 18 02 PM](https://github.com/user-attachments/assets/7c073250-b9aa-41ca-a56c-9965be3a5278)
+
 
 ### Schema Justification 
 Briefly explain why the database was designed this way, highlighting key tables and relationships.
