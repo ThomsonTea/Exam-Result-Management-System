@@ -107,24 +107,31 @@ public class StudentCheckEnrolledSubjects extends JPanel {
             }
         });
         
-
         // View the marks in a newly created google sheets
         exportBtn.addActionListener(e -> {
-            exportBtn.setEnabled(false); // Disable while creating
+            exportBtn.setEnabled(false);
             exportBtn.setText("Generating...");
 
             new Thread(() -> {
                 try {
-                    // Convert tableModel to JSON
-                    JSONArray tableArray = new JSONArray();
-                    for (int row = 0; row < tableModel.getRowCount(); row++) {
-                        JSONArray rowArray = new JSONArray();
-                        for (int col = 0; col < tableModel.getColumnCount(); col++) {
-                            Object cell = tableModel.getValueAt(row, col);
-                            rowArray.put(cell != null ? cell.toString() : "");
-                        }
-                        tableArray.put(rowArray);
-                    }
+                	// Convert tableModel to JSON
+                	JSONArray tableArray = new JSONArray();
+
+                	JSONArray headerRow = new JSONArray();
+                	for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                	    headerRow.put(tableModel.getColumnName(col));
+                	}
+                	tableArray.put(headerRow);
+
+                	for (int viewRow = 0; viewRow < subjectTable.getRowCount(); viewRow++) {
+                	    int modelRow = subjectTable.convertRowIndexToModel(viewRow);
+                	    JSONArray rowArray = new JSONArray();
+                	    for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                	        Object cell = tableModel.getValueAt(modelRow, col);
+                	        rowArray.put(cell != null ? cell.toString() : "");
+                	    }
+                	    tableArray.put(rowArray);
+                	}
 
                     JSONObject root = new JSONObject();
                     root.put("table", tableArray);

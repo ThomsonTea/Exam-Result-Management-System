@@ -76,8 +76,7 @@ public class TeacherService {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(method);
 
-        // --- THE CRITICAL SECURITY STEP ---
-        // Add the Authorization header to every single API request.
+        // Add Authorization header to every single API request.
         conn.setRequestProperty("Authorization", "Bearer " + token);
         conn.setRequestProperty("Content-Type", "application/json");
 
@@ -91,7 +90,7 @@ public class TeacherService {
 
         int responseCode = conn.getResponseCode();
         
-        // Read the response body. Use getErrorStream() if the request failed.
+        // Read the response body.
         InputStreamReader reader = new InputStreamReader(responseCode >= 400 ? conn.getErrorStream() : conn.getInputStream());
         
         StringBuilder response = new StringBuilder();
