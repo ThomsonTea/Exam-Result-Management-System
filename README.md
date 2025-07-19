@@ -66,7 +66,7 @@ The Exam Result Management System is a software application designed to streamli
 The system aims to reduce manual errors, eliminate paperwork, and improve the efficiency and transparency of result handling. Students can view their results online, while administrators can generate reports and perform data analysis with ease.
 
 ## Commercial Value / Third-Party Integration
-We integrate out software with Google Sheets API to helps teacher to view and export the data in....
+We integrate our software with the Google Sheets API to enable teachers and students to view and export data directly into Google Sheets.
 
 ## System Architecture
 
