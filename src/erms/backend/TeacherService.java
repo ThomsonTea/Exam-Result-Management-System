@@ -65,7 +65,8 @@ public class TeacherService {
     
     public static String exportToSheets(JSONObject data) {
         try {
-            URL url = new URL("https://script.google.com/macros/s/AKfycbxDSmfixRi2uK7p_j0iKv2c0PU8wJsW0Fkh-OR-Tz137yclYGS9XCRYmHRMK2RES6Hv/exec");
+        	String appScript = "https://script.google.com/macros/s/AKfycbxe39cgzDIR0MPI7_Ky4KpKTN9Ksx8O-bd-RT1zwJuGb8cO_NgtZ10YiZiBEXalb83k/exec";
+            URL url = new URL(appScript);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
@@ -83,7 +84,8 @@ public class TeacherService {
                     while ((line = in.readLine()) != null) {
                         response.append(line);
                     }
-
+                    System.out.println("Response body: " + response);
+                    
                     JSONObject responseJson = new JSONObject(response.toString());
                     return responseJson.optString("url", null); // Return the URL if present
                 }

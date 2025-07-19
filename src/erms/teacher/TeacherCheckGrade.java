@@ -49,7 +49,7 @@ public class TeacherCheckGrade extends JPanel {
 		
 		//--- Right side: Export Button
 		JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		exportBtn = new JButton("Export to Google Sheet");
+		exportBtn = new JButton("View in Google Sheets");
 		exportBtn.setEnabled(false); // Disable it initially
 		exportBtn.setOpaque(true);
 		exportBtn.setBackground(new Color(30, 144, 255));
@@ -99,8 +99,8 @@ public class TeacherCheckGrade extends JPanel {
                 
         // Export button (is disabled first before tableModel is populated)
         exportBtn.addActionListener(e -> {
-            exportBtn.setEnabled(false); // Disable while exporting
-            exportBtn.setText("Exporting...");
+            exportBtn.setEnabled(false); // Disable while creating
+            exportBtn.setText("Generating...");
 
             new Thread(() -> {
                 try {
@@ -123,7 +123,7 @@ public class TeacherCheckGrade extends JPanel {
 
                     SwingUtilities.invokeLater(() -> {
                         exportBtn.setEnabled(true);
-                        exportBtn.setText("Export to Google Sheet");
+                        exportBtn.setText("View in Google Sheets");
 
                         if (sheetUrl != null) {
                             JOptionPane.showMessageDialog(null, "✅ Sheet created!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -141,7 +141,7 @@ public class TeacherCheckGrade extends JPanel {
                 } catch (Exception ex) {
                     SwingUtilities.invokeLater(() -> {
                         exportBtn.setEnabled(true);
-                        exportBtn.setText("Export to Google Sheet");
+                        exportBtn.setText("View in Google Sheets");
                         JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     });
                 }
