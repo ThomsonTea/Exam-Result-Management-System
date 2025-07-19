@@ -59,6 +59,62 @@ teacherID: T001 , T002, T003
 studentID: total 58 can refer database, our grp member matric no. are included, pls feel free to try
 password: 12345678 (for all teachers and students)
 
+---
+## Project Overview
+The Exam Result Management System is a software application designed to streamline the process of recording, managing, and publishing students’ examination results. It serves as a centralized platform where administrators and teachers can input scores, generate reports, and provide students with secure access to their academic performance.
 
+The system aims to reduce manual errors, eliminate paperwork, and improve the efficiency and transparency of result handling. Students can view their results online, while administrators can generate reports and perform data analysis with ease.
+
+## Commercial Value / Third-Party Integration
+We integrate out software with Google Sheets API to helps teacher to view and export the data in....
+
+## System Architecture
+
+### High-Level Diagram
+
+## Backend Application
+
+### Technology Stack
+- Java
+- etc
+
+## API Documentation
+1) List of All API endpoints.
+2) HTTP method for each endpoint.
+3) Required request parameters, headers, and body formats (with JSON examples). - use Postman
+4) Example success and error responses (with status code and JSON example). - use Postman
+5) Security - Detail the security measures implemented. Explain the choice of mechanism and describe how it protects the endpoint.
+
+## Frontend Applications
+
+For each of the two frontend apps:
+
+## Purpose
+
+### Describe the app's function and target user (e.g., one app for customers, one for administrators).
+
+Technology Stack
+
+### List the frameworks and libraries used (e.g., React, Angular, Vue.js, Swift, Kotlin).
+
+API Integration
+
+### Explain how the frontend communicates with the backend API.
+
+## Database Design
+
+### Entity-Relationship Diagram (ERD)
+A diagram showing the database tables, their columns (with data types), and the relationships between them (one-to-one, one-to-many).
+
+### Schema Justification 
+Briefly explain why the database was designed this way, highlighting key tables and relationships.
+
+## Business Logic and Data Validation
+
+### Use Case Diagrams/Flowcharts
+Illustrate the main user flows, such as "selecting a book," "borrowing a book," and "returning a book." This visually demonstrates the business logic.
+
+### Data Validation
+Describe the validation rules implemented on both the frontend (e.g., checking for empty fields) and backend (e.g., ensuring an email is unique).
 
  
