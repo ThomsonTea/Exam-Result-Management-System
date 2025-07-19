@@ -131,19 +131,24 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
   
   Body:
   {
-   
+  "data": [
+    ["Subject ID", "Subject Name", "Score", "Grade", "Teacher ID"],
+    ["BITP 3123", "Distributed Application Development", "92", "A", "T003"],
+    ["BITP 2223", "Software Requirement and Design", "55", "D", "T001"],
+    ["BITP 3253", "Software Validation and Verification", "11", "F", "T002"]
+  ]
   }
   
   Success response:
-  Status Code: 
+  Status Code: 200 OK
   {
-     
+    "message": "Data exported successfully to Google Sheets."
   }
   
   Error response:
-  Status Code: 
+  Status Code: 400 Bad Request
   {
-  
+    "message": "Invalid or missing 'data' array."
   }
 
 ## 3. fetchSubjects
@@ -323,11 +328,18 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
   HTTP method: GET
   Header: Content-Type - application/json
 
+  Body:
+  {
+  "data": [
+    ["Student ID", "Subject ID", "Teacher ID", "Score", "Grade"],
+    ["B032310505", "BITP 3253", "T001", "92", "A"],
+    ["B032310002", "BITP 3253", "T002", "11", "F"]
+  ]
+  }
+
   Success response:
   Status Code: 200 OK
-   
-  
-  Error response:
+
   
 ## Frontend Applications
 
