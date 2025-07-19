@@ -61,14 +61,13 @@ public class TeacherMarkEntryPanel extends JPanel {
         formPanel.add(createRow("Grade (Auto):", gradeField));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        JButton submitBtn = new JButton("Submit & Export to Google Sheets");
-        submitBtn.setBorderPainted(false);
+        JButton submitBtn = new JButton("Submit Mark");
         submitBtn.setOpaque(true);
         submitBtn.setBackground(new Color(30, 144, 255));
         submitBtn.setForeground(Color.WHITE);
         submitBtn.setFocusPainted(false);
         
-        Dimension buttonSize = new Dimension(200, 40);
+        Dimension buttonSize = new Dimension(140, 40);
         submitBtn.setPreferredSize(buttonSize);
         
         buttonPanel.add(submitBtn);

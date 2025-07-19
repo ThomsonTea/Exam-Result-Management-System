@@ -1,5 +1,7 @@
 package erms.backend;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,29 +15,42 @@ public class StudentService {
 	private static final String API_BASE = "http://localhost/Exam-Result-Management-System/erms-api/";
 	
 	// export data to sheets
-	public static boolean exportDataToSheets(JSONArray data) throws Exception {
-	    // Wrap data array inside a parent object with key "data"
-	    JSONObject payload = new JSONObject();
-	    payload.put("data", data);
+	public static String exportToSheets(JSONObject data) {
+        try {
+        	String appScript = "https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec";
+            URL url = new URL(appScript);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setDoOutput(true);
 
-	    System.out.print("Sending JSON payload:\n" + payload.toString(2));
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(data.toString().getBytes("UTF-8"));
+            }
 
-	    URL url = new URL(API_BASE + "/Student/export-to-sheets.php");
-	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	    conn.setRequestMethod("POST");
-	    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-	    conn.setDoOutput(true);
+            int responseCode = conn.getResponseCode();
+            if (responseCode == 200) {
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        response.append(line);
+                    }
+                    System.out.println("Response body: " + response);
+                    
+                    JSONObject responseJson = new JSONObject(response.toString());
+                    return responseJson.optString("url", null); // Return the URL if present
+                }
+            } else {
+                System.err.println("Export failed: HTTP " + responseCode);
+                return null;
+            }
 
-	    try (OutputStream os = conn.getOutputStream()) {
-	        os.write(payload.toString().getBytes("UTF-8")); // Send wrapped object
-	        os.flush();
-	    }
-
-	    int responseCode = conn.getResponseCode();
-	    System.out.println("Export response code: " + responseCode);
-
-	    return responseCode == 200;
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 	
