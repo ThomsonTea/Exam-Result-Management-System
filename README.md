@@ -89,30 +89,34 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
 
 ## 1. login(AuthService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api//authentication.php
+  
   HTTP method: POST
+  
   Header: Content-Type - application/json
 
-  Body:
-  {
-    "userid": "B032310523",
-    "password": "12345678",
-    "role": "student"
-  }
+    Body:
+    {
+      "userid": "B032310523",
+      "password": "12345678",
+      "role": "student"
+    }
 
-  Success response:
-  Status Code: 200 OK
-  {
-      "message": "Login successful.",
-      "id": "B032310523",
-      "name": "HARIS A/L R SURESH"
-  }
+  
+    Success response:
+    Status Code: 200 OK
+    {
+        "message": "Login successful.",
+        "id": "B032310523",
+        "name": "HARIS A/L R SURESH"
+    }
 
+  
   Error response:
   Status Code: 401 Unauthorized
   {
       "message": "Invalid ID or password2."
   }
-  
+    
   Status Code: 400 Bad Request
   {
       "message": "User ID, password, and role are required."
@@ -120,237 +124,253 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
 
 ## 2. exportToSheets(Student Service)
   API endpoint: https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec
+  
   HTTP method: POST
+ 
   Header: Content-Type - application/json
   
-  Body:
-  {
-  "data": [
-    ["Subject ID", "Subject Name", "Score", "Grade", "Teacher ID"],
-    ["BITP 3123", "Distributed Application Development", "92", "A", "T003"],
-    ["BITP 2223", "Software Requirement and Design", "55", "D", "T001"],
-    ["BITP 3253", "Software Validation and Verification", "11", "F", "T002"]
-  ]
-  }
+    Body:
+    {
+    "data": [
+      ["Subject ID", "Subject Name", "Score", "Grade", "Teacher ID"],
+      ["BITP 3123", "Distributed Application Development", "92", "A", "T003"],
+      ["BITP 2223", "Software Requirement and Design", "55", "D", "T001"],
+      ["BITP 3253", "Software Validation and Verification", "11", "F", "T002"]
+    ]
+    }
   
-  Success response:
-  Status Code: 200 OK
-  {
-    "url": "https://docs.google.com/spreadsheets/d/1sof4dRyJEy851qU06cyvnu55_FzfsbMgITAiejEkhoM/edit"
-  }
-  
-  Error response:
-  Status Code: 400 Bad Request
-  {
-    "message": "Invalid or missing 'data' array."
-  }
+    Success response:
+    Status Code: 200 OK
+    {
+      "url": "https://docs.google.com/spreadsheets/d/1sof4dRyJEy851qU06cyvnu55_FzfsbMgITAiejEkhoM/edit"
+    }
+    
+    Error response:
+    Status Code: 400 Bad Request
+    {
+      "message": "Invalid or missing 'data' array."
+    }
 
 ## 3. fetchSubjects(TeacherService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects-marks.php
+  
   HTTP method: POST
+ 
   Header: Content-Type - application/json
   
-  Body:
-  {
-  "studentID": "B032310523"
-  }
-  
-  Success response:
-  Status Code: 200 OK
-  [
+    Body:
     {
-        "subjectID": "BITP 2223",
-        "subjectName": "Software Requirement and Design"
-    },
-    {
-        "subjectID": "BITP 3253",
-        "subjectName": " Software Validation and Verification"
-    }
-  ]
-  
-  Error response:
-  Status Code: 400 Bad Request
-  {
-    "message": "studentID is required"
-  }
-
-  ## 4. fetchMarks(Student Service)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-subject-mark.php
-  HTTP method: POST
-  Header: Content-Type - application/json
-  
-  Body:
-  {
-    "studentID": "B032310523",
-    "subjectID": "BITP 2223"
-  }
-    
-  Success response:
-  Status Code: 200 OK
-  [
-    {
-        "score": 78,
-        "grade": "B"
-    }
-  ]
-  
-  Error response:
-  Status Code: 400 Bad Request
-  {
-    "message": "Both studentID and subjectID are required"
-  }
-
-  ## 5. fetchEnrolledSubjects(Student Service)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects.php
-  HTTP method: POST
-  Header: Content-Type - application/json
-  
-  Body:
-  {
     "studentID": "B032310523"
-  }
-
-  Success response:
-  Status Code: 200 OK
-   [
+    }
+    
+    Success response:
+    Status Code: 200 OK
+    [
       {
           "subjectID": "BITP 2223",
-          "subjectName": "Software Requirement and Design",
-          "score": 78,
-          "grade": "B",
-          "teacherID": "T001"
+          "subjectName": "Software Requirement and Design"
       },
       {
           "subjectID": "BITP 3253",
-          "subjectName": " Software Validation and Verification",
-          "score": 80,
-          "grade": "A",
-          "teacherID": "T002"
+          "subjectName": " Software Validation and Verification"
       }
-  ]
-  
-  Error response:
-  Status Code: 400 Bad Request
-  {
+    ]
+    
+    Error response:
+    Status Code: 400 Bad Request
+    {
       "message": "studentID is required"
-  }
+    }
+
+  ## 4. fetchMarks(Student Service)
+  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-subject-mark.php
+  
+  HTTP method: POST
+  
+  Header: Content-Type - application/json
+  
+    Body:
+    {
+      "studentID": "B032310523",
+      "subjectID": "BITP 2223"
+    }
+      
+    Success response:
+    Status Code: 200 OK
+    [
+      {
+          "score": 78,
+          "grade": "B"
+      }
+    ]
+    
+    Error response:
+    Status Code: 400 Bad Request
+    {
+      "message": "Both studentID and subjectID are required"
+    }
+
+  ## 5. fetchEnrolledSubjects(Student Service)
+  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects.php
+  
+  HTTP method: POST
+  
+  Header: Content-Type - application/json
+  
+    Body:
+    {
+      "studentID": "B032310523"
+    }
+  
+    Success response:
+    Status Code: 200 OK
+     [
+        {
+            "subjectID": "BITP 2223",
+            "subjectName": "Software Requirement and Design",
+            "score": 78,
+            "grade": "B",
+            "teacherID": "T001"
+        },
+        {
+            "subjectID": "BITP 3253",
+            "subjectName": " Software Validation and Verification",
+            "score": 80,
+            "grade": "A",
+            "teacherID": "T002"
+        }
+    ]
+    
+    Error response:
+    Status Code: 400 Bad Request
+    {
+        "message": "studentID is required"
+    }
 
   ## 6. fetchStudents(TeacherService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-students.php
+  
   HTTP method: GET
     
-  Success response:
-  Status Code: 200 OK
-   [
-    {
-        "studentID": "B032310002",
-        "studentName": "AHMAD NAQIUDDIN BIN MOHAMAD"
-    },
-    {
-        "studentID": "B032310011",
-        "studentName": "KISHAH A/P PRAKHASH"
-    }
-  ]
+    Success response:
+    Status Code: 200 OK
+    [
+      {
+          "studentID": "B032310002",
+          "studentName": "AHMAD NAQIUDDIN BIN MOHAMAD"
+      },
+      {
+          "studentID": "B032310011",
+          "studentName": "KISHAH A/P PRAKHASH"
+      }
+    ]
 
 ## 7. fetchSubjects (TeacherService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-subjects.php
-  HTTP method: POST
-  Header: Content-Type - application/json
-  
-  Body:
-  {
-    "teacherID": "T003"
-  }
-
-  Success response:
-  Status Code: 200 OK
-   [
+ 
+    HTTP method: POST
+    
+    Header: Content-Type - application/json
+    
+    Body:
     {
-        "subjectID": "BITP 3123",
-        "subjectName": " Distributed Application Development"
-    },
-    {
-        "subjectID": "BITP 3453 ",
-        "subjectName": "Mobile Application Development"
+      "teacherID": "T003"
     }
-  ]
   
-  Error response:
-  Status Code: 400 Bad Request
-  {
-    "message": "teacherID is required"
-  }
+    Success response:
+    Status Code: 200 OK
+      [
+      {
+          "subjectID": "BITP 3123",
+          "subjectName": " Distributed Application Development"
+      },
+      {
+          "subjectID": "BITP 3453 ",
+          "subjectName": "Mobile Application Development"
+      }
+    ]
+    
+    Error response:
+    Status Code: 400 Bad Request
+    {
+      "message": "teacherID is required"
+    }
 
   ## 8. submitMark(Teacher Service)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-subjects.php
+  
   HTTP method: POST
+  
   Header: Content-Type - application/json
   
-  Body:
-  {
-  "studentID": "B032310523",
-  "subjectID": "BITP 3453",
-  "teacherID": "T003",
-  "score": 88,
-  "grade": "A"
-  }
-
-  Success response:
-  Status Code: 200 OK
-  {
-    "message": "Mark inserted and exported."
-  }
+    Body:
+    {
+    "studentID": "B032310523",
+    "subjectID": "BITP 3453",
+    "teacherID": "T003",
+    "score": 88,
+    "grade": "A"
+    }
   
-  Error response:
-  Status Code: 400 Bad Request
-  {
-    "message": "Missing required fields."
-  }
-
-  Status Code: 409 Conflict
-  {
-    "message": "This student already has a mark for this subject."
-  }
-
-  Status Code: 500 Internal Server Error
-  {
-    "error": "SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`erms_db`.`mark`, CONSTRAINT `mark_ibfk_2` FOREIGN KEY (`subjectID`)     REFERENCES `subject` (`subjectID`))"
-  }
+    Success response:
+    Status Code: 200 OK
+    {
+      "message": "Mark inserted and exported."
+    }
+    
+    Error response:
+    Status Code: 400 Bad Request
+    {
+      "message": "Missing required fields."
+    }
+  
+    Status Code: 409 Conflict
+    {
+      "message": "This student already has a mark for this subject."
+    }
+  
+    Status Code: 500 Internal Server Error
+    {
+      "error": "SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`erms_db`.`mark`, CONSTRAINT `mark_ibfk_2` FOREIGN KEY (`subjectID`)     REFERENCES `subject` (`subjectID`))"
+    }
 
   ## 9. fetchMarks (TeacherService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-marks.php?teacherID=" + teacherID
+ 
   HTTP method: GET
+  
   Header: Content-Type - application/json
 
-  Body:
-  No Body Required
-
-  Success response:
-  Status Code: 200 OK
-
-    [
-    {
-      "studentID": "B032310505",
-      "subjectID": "BITP 3253",
-      "teacherID": "T002",
-      "score": 11,
-      "grade": "F"
-    },
-    {
-      "studentID": "B032310002",
-      "subjectID": "BITP 3253",
-      "teacherID": "T002",
-      "score": 89,
-      "grade": "B"
-    }
-  ]
+    Body:
+    No Body Required
+  
+    Success response:
+    Status Code: 200 OK
+      [
+      {
+        "studentID": "B032310505",
+        "subjectID": "BITP 3253",
+        "teacherID": "T002",
+        "score": 11,
+        "grade": "F"
+      },
+      {
+        "studentID": "B032310002",
+        "subjectID": "BITP 3253",
+        "teacherID": "T002",
+        "score": 89,
+        "grade": "B"
+      }
+    ]
 
 
   ## 10. exportToSheets(TeacherService)
   API endpoint: https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec
+  
   HTTP method: POST
+  
   Header: Content-Type - application/json
-
+  
     Body:
     {
     "data": [
@@ -359,7 +379,7 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       ["B032310002", "BITP 3253", "T002", "11", "F"]
     ]
     }
-
+  
     Success response:
     {
     "url": "https://docs.google.com/spreadsheets/d/1j2iSfIegL9TgKW2rqatdpmaCqPSDTzkFy9daPAfdQAQ/edit"
