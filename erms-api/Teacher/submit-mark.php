@@ -39,7 +39,7 @@ try {
     $stmt->bindParam(":score", $data->score);
     $stmt->bindParam(":grade", $data->grade);
     $stmt->execute();
-
+    
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(["error" => $e->getMessage()]);

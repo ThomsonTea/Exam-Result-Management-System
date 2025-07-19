@@ -65,7 +65,7 @@ public class TeacherService {
     
     public static String exportToSheets(JSONObject data) {
         try {
-        	String appScript = "https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec";        	
+        	String appScript = "https://script.google.com/macros/s/AKfycby2ospOZIXhUoOhUA1yUQSbWz006_U_RiTs-XFphAoGmbihFBRT0XPkWabY0_jUJF8r/exec";        	
         	URL url = new URL(appScript);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
