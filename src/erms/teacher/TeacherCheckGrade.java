@@ -1,5 +1,6 @@
 package erms.teacher;
 
+import erms.backend.AuthService;
 import erms.backend.TeacherService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,9 +24,14 @@ public class TeacherCheckGrade extends JPanel {
     private TableRowSorter<DefaultTableModel> sorter;
     private String teacherID;
     private JSONArray marks;
+    private final AuthService authService;
+    private final String currentToken;
 
-    public TeacherCheckGrade(String teacherID) {
+    public TeacherCheckGrade(String teacherID, AuthService service, String token) {
         this.teacherID = teacherID;
+        this.authService = service;
+        this.currentToken = token;
+        
         setLayout(new BorderLayout());
 
         // Top panel
@@ -160,7 +166,7 @@ public class TeacherCheckGrade extends JPanel {
             subjectFilter.removeAllItems();
             subjectFilter.addItem("All");
 
-            marks = TeacherService.fetchMarks(teacherID);
+            marks = TeacherService.fetchMarks(this.currentToken);
             Set<String> subjects = new HashSet<>();
 
             for (int i = 0; i < marks.length(); i++) {
@@ -175,15 +181,13 @@ public class TeacherCheckGrade extends JPanel {
                 subjects.add(subjectID);
             }
 
-            // Add unique subjects to filter dropdown
-            for (String sub : subjects) {
-                subjectFilter.addItem(sub);
-            }
+            subjects.stream().sorted().forEach(subjectFilter::addItem);
             
             // Enable export button only if table has rows
             if (tableModel.getRowCount() > 0) {
                 exportBtn.setEnabled(true);
             }
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "❌ Failed to load marks: " + e.getMessage());
         }

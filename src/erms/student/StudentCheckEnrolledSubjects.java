@@ -1,5 +1,7 @@
 package erms.student;
 
+import erms.backend.AuthService;
+
 import erms.backend.StudentService;
 import erms.backend.TeacherService;
 
@@ -24,10 +26,15 @@ public class StudentCheckEnrolledSubjects extends JPanel {
     private JComboBox<String> subjectFilter;
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> sorter;
+    private final AuthService authService;
+    private final String currentToken;
     private String studentID;
 
-    public StudentCheckEnrolledSubjects(String studentID) {
+    public StudentCheckEnrolledSubjects(String studentID, AuthService service, String token) {
         this.studentID = studentID;
+        this.authService = service;
+        this.currentToken = token;
+        
         setLayout(new BorderLayout(0, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -163,10 +170,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
             subjectFilter.removeAllItems();
             subjectFilter.addItem("All");
             
-            JSONObject requestData = new JSONObject();
-            requestData.put("studentID", this.studentID);
-            
-            JSONArray subjectsDataArray = StudentService.fetchEnrolledSubjects(requestData);
+            JSONArray subjectsDataArray = StudentService.fetchEnrolledSubjects(this.currentToken);
 
             Set<String> subjects = new HashSet<>();
 
@@ -175,9 +179,10 @@ public class StudentCheckEnrolledSubjects extends JPanel {
                 String subjectIDValue = row.getString("subjectID");
                 String subjectName = row.getString("subjectName");
 
+                // Use optInt/optString for safety in case a value is missing
                 Object score = row.has("score") ? row.getInt("score") : "N/A";
                 String grade = row.optString("grade", "N/A");
-                String tID = row.getString("teacherID");
+                String tID = row.optString("teacherID", "N/A");
 
                 tableModel.addRow(new Object[]{subjectIDValue, subjectName, score, grade, tID});
                 subjects.add(subjectIDValue);
@@ -192,7 +197,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
             
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load marks: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "❌ Failed to load marks: " + e.getMessage());
         }
     }
 }

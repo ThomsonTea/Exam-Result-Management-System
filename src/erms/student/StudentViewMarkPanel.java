@@ -17,10 +17,14 @@ public class StudentViewMarkPanel extends JPanel {
     private JTextField scoreField, gradeField;
 	private String studentID;
 	private String[] studentName;
+    private final AuthService authService;
+    private final String currentToken;
 
-    public StudentViewMarkPanel(String studentID, String studentName) {
+    public StudentViewMarkPanel(String studentID, String studentName, AuthService service, String token) {
     	this.studentID = studentID;
     	this.studentName = studentName.split(" ");
+        this.authService = service;
+        this.currentToken = token;
 
         setLayout(new BorderLayout());
 
@@ -71,11 +75,9 @@ public class StudentViewMarkPanel extends JPanel {
      // Fetches the subjects the student is enrolled in and populates the dropdown.
     private void fetchSubjectsMarks() {
         try {
-            JSONObject requestData = new JSONObject();
-
-            requestData.put("studentID", this.studentID);
-
-            JSONArray subjects = StudentService.fetchSubjects(requestData);
+            // REMOVED: No longer need to create a JSON object for the request.
+            // The new service method only needs the token.
+            JSONArray subjects = StudentService.fetchSubjects(this.currentToken);
 
             for (int i = 0; i < subjects.length(); i++) {
                 JSONObject subject = subjects.getJSONObject(i);
@@ -100,18 +102,11 @@ public class StudentViewMarkPanel extends JPanel {
         String subjectID = selectedSubject.split(" - ")[0].trim();
 
         try {
-            JSONObject requestData = new JSONObject();
+            // REMOVED: No longer need to create a JSON object for the request.
+            // The new service method takes the subjectID and token as separate arguments.
+            JSONObject markObject = StudentService.fetchMark(subjectID, this.currentToken);
 
-            requestData.put("studentID", this.studentID);
-            requestData.put("subjectID", subjectID);
-            
-            System.out.print("requestData:" + requestData + "\n");
-            
-            JSONArray markDataArray = StudentService.fetchMarks(requestData);
-
-            if (markDataArray.length() > 0) {
-                JSONObject markObject = markDataArray.getJSONObject(0);
-
+            if (markObject != null) {
                 int score = markObject.getInt("score");
                 String grade = markObject.getString("grade");
 
@@ -124,8 +119,8 @@ public class StudentViewMarkPanel extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "⚠️ Could not fetch mark: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            scoreField.setText("Error");
-            gradeField.setText("Error");
+            scoreField.setText("Not Marked Yet");
+            gradeField.setText("N/A");
         }
     }
 

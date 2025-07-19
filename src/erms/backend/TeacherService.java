@@ -13,54 +13,24 @@ import java.util.Scanner;
 public class TeacherService {
     private static final String API_BASE = "http://localhost/Exam-Result-Management-System/erms-api/";
 
-    public static JSONArray fetchStudents() throws Exception {
-        URL url = new URL(API_BASE + "/Teacher/fetch-students.php");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-Type", "application/json");
-
-        Scanner scanner = new Scanner(conn.getInputStream());
-        String response = scanner.useDelimiter("\\A").next();
-        scanner.close();
-
-        return new JSONArray(response);
+    public static JSONArray fetchStudents(String currentToken) throws Exception {
+        String responseString = executeRequest("GET", "/Teacher/fetch-students.php", null, currentToken);
+        return new JSONArray(responseString);
     }
 
-    public static JSONArray fetchSubjects(String teacherID) throws Exception {
-        URL url = new URL(API_BASE + "/Teacher/fetch-subjects.php");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        JSONObject payload = new JSONObject();
-        payload.put("teacherID", teacherID);
-
-        OutputStream os = conn.getOutputStream();
-        os.write(payload.toString().getBytes());
-        os.flush();
-        os.close();
-
-        Scanner scanner = new Scanner(conn.getInputStream());
-        String response = scanner.useDelimiter("\\A").next();
-        scanner.close();
-
-        return new JSONArray(response);
+    public static JSONArray fetchSubjects(String currentToken) throws Exception {
+        String responseString = executeRequest("GET", "/Teacher/fetch-subjects.php", null, currentToken);
+        return new JSONArray(responseString);
     }
 
-    public static boolean submitMark(JSONObject data) throws Exception {
-        URL url = new URL(API_BASE + "/Teacher/submit-mark.php");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        OutputStream os = conn.getOutputStream();
-        os.write(data.toString().getBytes());
-        os.flush();
-        os.close();
-
-        return conn.getResponseCode() == 200;
+    public static void submitMark(JSONObject data, String currentToken) throws Exception {
+        // This method creates a resource. It succeeds or throws an exception. It doesn't need to return anything.
+        executeRequest("POST", "/Teacher/submit-mark.php", data.toString(), currentToken);
+    }
+    
+    public static JSONArray fetchMarks(String currentToken) throws Exception {
+        String responseString = executeRequest("GET", "/Teacher/fetch-marks.php", null, currentToken);
+        return new JSONArray(responseString);
     }
     
     public static String exportToSheets(JSONObject data) {
@@ -101,17 +71,46 @@ public class TeacherService {
     }
 
     
-    public static JSONArray fetchMarks(String teacherID) throws Exception {
-        URL url = new URL(API_BASE + "/Teacher/fetch-marks.php?teacherID=" + teacherID);
+    private static String executeRequest(String method, String endpoint, String jsonBody, String token) throws Exception {
+        URL url = new URL(API_BASE + endpoint);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
+        conn.setRequestMethod(method);
+
+        // --- THE CRITICAL SECURITY STEP ---
+        // Add the Authorization header to every single API request.
+        conn.setRequestProperty("Authorization", "Bearer " + token);
         conn.setRequestProperty("Content-Type", "application/json");
 
-        Scanner scanner = new Scanner(conn.getInputStream());
-        String response = scanner.useDelimiter("\\A").next();
-        scanner.close();
+        if (("POST".equalsIgnoreCase(method) || "PUT".equalsIgnoreCase(method)) && jsonBody != null) {
+            conn.setDoOutput(true);
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(jsonBody.getBytes("UTF-8"));
+                os.flush();
+            }
+        }
 
-        return new JSONArray(response);
+        int responseCode = conn.getResponseCode();
+        
+        // Read the response body. Use getErrorStream() if the request failed.
+        InputStreamReader reader = new InputStreamReader(responseCode >= 400 ? conn.getErrorStream() : conn.getInputStream());
+        
+        StringBuilder response = new StringBuilder();
+        try (Scanner scanner = new Scanner(reader)) {
+            while (scanner.hasNextLine()) {
+                response.append(scanner.nextLine());
+            }
+        }
+        conn.disconnect();
+
+        // If the request failed, throw an exception with the server's error message.
+        if (responseCode >= 400) {
+            JSONObject errorJson = new JSONObject(response.toString());
+            String errorMessage = errorJson.optString("message", "An unknown server error occurred.");
+            throw new RuntimeException("Failed: HTTP " + responseCode + " - " + errorMessage);
+        }
+        
+        // On success, return the raw response string for the public methods to parse.
+        return response.toString();
     }
 
 }

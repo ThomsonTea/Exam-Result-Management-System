@@ -1,5 +1,6 @@
 package erms.student;
 
+import erms.backend.AuthService;
 import erms.MainApp;
 import javax.swing.*;
 import java.awt.*;
@@ -10,13 +11,18 @@ public class StudentMainMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private CardLayout cardLayout;
     private JPanel contentPanel;
+    
+    private final AuthService authService;
+    private final String currentToken;
 
     private final String studentID;
     private final String studentName;
 
-    public StudentMainMenu(String id, String name) {
+    public StudentMainMenu(String id, String name, AuthService service, String token) {
         this.studentID = (id != null) ? id : "";
         this.studentName = (name != null) ? name : "";
+        this.authService = service;
+        this.currentToken = token;
 
         setLayout(new BorderLayout());
 
@@ -64,8 +70,8 @@ public class StudentMainMenu extends JPanel {
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
 
-        StudentViewMarkPanel viewMarkPanel = new StudentViewMarkPanel(studentID, studentName);
-        StudentCheckEnrolledSubjects checkSubjectPanel = new StudentCheckEnrolledSubjects(studentID);
+        StudentViewMarkPanel viewMarkPanel = new StudentViewMarkPanel(studentID, studentName, authService, currentToken);
+        StudentCheckEnrolledSubjects checkSubjectPanel = new StudentCheckEnrolledSubjects(studentID, authService, currentToken);
 
         contentPanel.add(viewMarkPanel, "Mark/GradeView");
         contentPanel.add(checkSubjectPanel, "CheckEnrolledSubjects");
@@ -81,22 +87,44 @@ public class StudentMainMenu extends JPanel {
 
 
         logoutButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "You have logged out.", "Logout", JOptionPane.INFORMATION_MESSAGE);
-
-            SwingUtilities.getWindowAncestor(this).dispose();
-            MainApp.main(null);
+        	handleLogout();
         });
     }
 
-    // Optional for testing standalone
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Student Menu");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(900, 500);
-            frame.setLocationRelativeTo(null);
-            frame.setContentPane(new StudentMainMenu("B032310000", "Example Student"));
-            frame.setVisible(true);
-        });
+//    // Optional for testing standalone
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            JFrame frame = new JFrame("Student Menu");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            frame.setSize(900, 500);
+//            frame.setLocationRelativeTo(null);
+//            frame.setContentPane(new StudentMainMenu("B032310000", "Example Student"));
+//            frame.setVisible(true);
+//        });
+//    }
+    
+    private void handleLogout() {
+        try {
+            if(authService.logout(currentToken)) {
+                SwingUtilities.getWindowAncestor(this).dispose();
+                MainApp.main(null);
+                
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "You have been successfully logged out.", 
+                    "Logout", 
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+        } catch (Exception ex) {
+            System.err.println("Logout failed on server: " + ex.getMessage());
+            JOptionPane.showMessageDialog(
+                this, 
+                "Could not contact the server, but you will be logged out locally.", 
+                "Logout Warning", 
+                JOptionPane.WARNING_MESSAGE
+            );
+        }
     }
 }
