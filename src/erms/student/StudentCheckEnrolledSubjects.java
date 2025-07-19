@@ -1,6 +1,7 @@
 package erms.student;
 
 import erms.backend.StudentService;
+import erms.backend.TeacherService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -18,6 +20,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JTable subjectTable;
+    private JButton exportBtn;
     private JComboBox<String> subjectFilter;
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> sorter;
@@ -29,7 +32,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel titlePanel = new JPanel(new BorderLayout());
-        JLabel title = new JLabel("Check Enrolled Subjects", SwingConstants.CENTER);
+        JLabel title = new JLabel("Check Enrolled Subjects Marks", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 20));
         titlePanel.add(title, BorderLayout.CENTER);
 
@@ -41,15 +44,15 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         filterPanel.add(subjectFilter);
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        JButton submitBtn = new JButton("Export to Google Sheets");
-        submitBtn.setBorderPainted(false);
-//        submitBtn.setOpaque(true);
-        submitBtn.setBackground(new Color(21, 115, 71));
-        submitBtn.setForeground(Color.WHITE);
-//        submitBtn.setFocusPainted(false);
-        submitBtn.setFont(new Font("Arial", Font.BOLD, 12));
-//        submitBtn.setPreferredSize(new Dimension(220, 35));
-        buttonPanel.add(submitBtn);
+        exportBtn = new JButton("View in Google Sheets");
+        exportBtn.setBorderPainted(false);
+        exportBtn.setOpaque(true);
+        exportBtn.setBackground(new Color(21, 115, 71));
+        exportBtn.setForeground(Color.WHITE);
+        exportBtn.setFocusPainted(false);
+        exportBtn.setFont(new Font("Arial", Font.BOLD, 12));
+		exportBtn.setPreferredSize(new Dimension(190, 30));
+        buttonPanel.add(exportBtn);
 
         controlsPanel.add(filterPanel, BorderLayout.WEST);
         controlsPanel.add(buttonPanel, BorderLayout.EAST);
@@ -62,7 +65,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         
         add(topPanel, BorderLayout.NORTH);
 
-        tableModel = new DefaultTableModel(new String[]{"subjectID", "subjectName", "score", "grade", "teacherID"}, 0) {
+        tableModel = new DefaultTableModel(new String[]{"Subject ID", "Subject Name", "Score", "Grade", "Teacher ID"}, 0) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -82,72 +85,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
         for (int i = 0; i < tableModel.getColumnCount(); i++) {
             subjectTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-
-        // export to google sheets
-        submitBtn.addActionListener(e -> {
-            submitBtn.setEnabled(false);
-            submitBtn.setText("Exporting, please wait...");
-
-            // using SwingWorker for multithreading.
-            SwingWorker<Void, Void> worker = new SwingWorker<>() {
-                private String errorMessage = null;
-
-                @Override
-                protected Void doInBackground() {
-                    try {
-                        String[] jsonKeys = {"subjectID", "subjectName", "score", "grade", "teacherID"};
-                        JSONArray tableData = new JSONArray();
-
-                        for (int i = 0; i < subjectTable.getRowCount(); i++) {
-                            int modelRow = subjectTable.convertRowIndexToModel(i);
-                            JSONObject rowObject = new JSONObject();
-                            
-                            for (int col = 0; col < jsonKeys.length; col++) {
-                                rowObject.put(jsonKeys[col], tableModel.getValueAt(modelRow, col));
-                            }
-                            rowObject.put("studentID", studentID);
-                            tableData.put(rowObject);
-                        }
-
-                        boolean success = StudentService.exportDataToSheets(tableData);
-                        
-                        if (!success) {
-                            errorMessage = "Server returned an error during export.";
-                        }
-
-                    } catch (Exception ex) {
-                        errorMessage = ex.getMessage();
-                        ex.printStackTrace();
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-
-                    if (errorMessage == null) {
-                        JOptionPane.showMessageDialog(
-                            StudentCheckEnrolledSubjects.this,
-                            "Data successfully exported to Google Sheets!",
-                            "Success",
-                            JOptionPane.INFORMATION_MESSAGE
-                        );
-                    } else {
-                        JOptionPane.showMessageDialog(
-                            StudentCheckEnrolledSubjects.this,
-                            "Export failed: " + errorMessage,
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE
-                        );
-                    }
-                    
-                    submitBtn.setText("Export to Google Sheets");
-                    submitBtn.setEnabled(true);
-                }
-            };
-            worker.execute();
-        });
-
+        
         subjectFilter.addActionListener(e -> {
             Object selectedObj = subjectFilter.getSelectedItem();
             if (selectedObj == null) {
@@ -161,6 +99,58 @@ public class StudentCheckEnrolledSubjects extends JPanel {
                 sorter.setRowFilter(RowFilter.regexFilter(Pattern.quote(selected), 0));
             }
         });
+        
+
+        // View the marks in a newly created google sheets
+        exportBtn.addActionListener(e -> {
+            exportBtn.setEnabled(false); // Disable while creating
+            exportBtn.setText("Generating...");
+
+            new Thread(() -> {
+                try {
+                    // Convert tableModel to JSON
+                    JSONArray tableArray = new JSONArray();
+                    for (int row = 0; row < tableModel.getRowCount(); row++) {
+                        JSONArray rowArray = new JSONArray();
+                        for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                            Object cell = tableModel.getValueAt(row, col);
+                            rowArray.put(cell != null ? cell.toString() : "");
+                        }
+                        tableArray.put(rowArray);
+                    }
+
+                    JSONObject root = new JSONObject();
+                    root.put("table", tableArray);
+
+                    // Call export and get the sheet URL
+                    String sheetUrl = TeacherService.exportToSheets(root);
+
+                    SwingUtilities.invokeLater(() -> {
+                        exportBtn.setEnabled(true);
+                        exportBtn.setText("View in Google Sheets");
+
+                        if (sheetUrl != null) {
+                            JOptionPane.showMessageDialog(null, "✅ Sheet created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                            try {
+                                Desktop.getDesktop().browse(new URI(sheetUrl));
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(null, "Couldn't open sheet in browser: " + ex.getMessage());
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "❌ Failed to export data to Google Sheets.");
+                        }
+                    });
+                    
+                } catch (Exception ex) {
+                    SwingUtilities.invokeLater(() -> {
+                        exportBtn.setEnabled(true);
+                        exportBtn.setText("View in Google Sheets");
+                        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    });
+                }
+            }).start();
+        });
 
         // Initial data load
         reload();
@@ -168,7 +158,8 @@ public class StudentCheckEnrolledSubjects extends JPanel {
 
     public void reload() {
         try {
-            tableModel.setRowCount(0);
+        	exportBtn.setEnabled(false); // Disable before load
+            tableModel.setRowCount(0); // clear table
             subjectFilter.removeAllItems();
             subjectFilter.addItem("All");
             
@@ -194,6 +185,11 @@ public class StudentCheckEnrolledSubjects extends JPanel {
 
             subjects.stream().sorted().forEach(subjectFilter::addItem);
 
+            // Enable export button only if table has rows
+            if (tableModel.getRowCount() > 0) {
+                exportBtn.setEnabled(true);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Failed to load marks: " + e.getMessage());

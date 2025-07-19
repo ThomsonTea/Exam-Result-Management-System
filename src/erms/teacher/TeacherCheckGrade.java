@@ -38,8 +38,8 @@ public class TeacherCheckGrade extends JPanel {
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         topPanel.add(title);
 
-        // Filter panel
-        JPanel filterPanel = new JPanel(new BorderLayout());
+        // Control panel (Filter and export button)
+        JPanel controlPanel = new JPanel(new BorderLayout());
 
 		//--- Left side: Label + ComboBox
 		JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -59,9 +59,9 @@ public class TeacherCheckGrade extends JPanel {
 		rightPanel.add(exportBtn);
 		
 		//--- Add both to filterPanel, then topPanel
-		filterPanel.add(leftPanel, BorderLayout.WEST);
-		filterPanel.add(rightPanel, BorderLayout.EAST);
-		topPanel.add(filterPanel);
+		controlPanel.add(leftPanel, BorderLayout.WEST);
+		controlPanel.add(rightPanel, BorderLayout.EAST);
+		topPanel.add(controlPanel);
 		add(topPanel, BorderLayout.NORTH);
 
 
@@ -180,11 +180,10 @@ public class TeacherCheckGrade extends JPanel {
                 subjectFilter.addItem(sub);
             }
             
-            // ✅ Enable export button only if table has rows
+            // Enable export button only if table has rows
             if (tableModel.getRowCount() > 0) {
                 exportBtn.setEnabled(true);
             }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "❌ Failed to load marks: " + e.getMessage());
         }
