@@ -86,7 +86,7 @@ Networking - HttpURLConnection, HttpClient
 JSON Processing	- org.json (for JSON parsing)
 Web Server - PHP-based backend (API hosted in /erms-api/)
 
-## 1. login
+## 1. login(AuthService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api//authentication.php
   HTTP method: POST
   Header: Content-Type - application/json
@@ -117,8 +117,8 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       "message": "User ID, password, and role are required."
   }
 
-## 2. exportDataToSheets
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/export-to-sheets.php
+## 2. exportToSheets(Student Service)
+  API endpoint: https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec
   HTTP method: POST
   Header: Content-Type - application/json
   
@@ -135,7 +135,7 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
   Success response:
   Status Code: 200 OK
   {
-    "message": "Data exported successfully to Google Sheets."
+    "url": "https://docs.google.com/spreadsheets/d/1sof4dRyJEy851qU06cyvnu55_FzfsbMgITAiejEkhoM/edit"
   }
   
   Error response:
@@ -144,7 +144,7 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
     "message": "Invalid or missing 'data' array."
   }
 
-## 3. fetchSubjects
+## 3. fetchSubjects(TeacherService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects-marks.php
   HTTP method: POST
   Header: Content-Type - application/json
@@ -173,7 +173,7 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
     "message": "studentID is required"
   }
 
-  ## 4. fetchMarks
+  ## 4. fetchMarks(Student Service)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-subject-mark.php
   HTTP method: POST
   Header: Content-Type - application/json
@@ -199,7 +199,7 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
     "message": "Both studentID and subjectID are required"
   }
 
-  ## 5. fetchEnrolledSubjects
+  ## 5. fetchEnrolledSubjects(Student Service)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects.php
   HTTP method: POST
   Header: Content-Type - application/json
@@ -234,7 +234,7 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       "message": "studentID is required"
   }
 
-  ## 6. fetchStudents
+  ## 6. fetchStudents(TeacherService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-students.php
   HTTP method: GET
     
@@ -280,8 +280,8 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
     "message": "teacherID is required"
   }
 
-  ## 8. submitMark
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api//Teacher/fetch-subjects.php
+  ## 8. submitMark(Teacher Service)
+  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-subjects.php
   HTTP method: POST
   Header: Content-Type - application/json
   
@@ -322,18 +322,56 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
   Header: Content-Type - application/json
 
   Body:
-  {
-  "data": [
-    ["Student ID", "Subject ID", "Teacher ID", "Score", "Grade"],
-    ["B032310505", "BITP 3253", "T001", "92", "A"],
-    ["B032310002", "BITP 3253", "T002", "11", "F"]
-  ]
-  }
+  No Body Required
 
   Success response:
   Status Code: 200 OK
 
-  ## Implemented Security Measures:
+    [
+    {
+      "studentID": "B032310505",
+      "subjectID": "BITP 3253",
+      "teacherID": "T002",
+      "score": 11,
+      "grade": "F"
+    },
+    {
+      "studentID": "B032310002",
+      "subjectID": "BITP 3253",
+      "teacherID": "T002",
+      "score": 89,
+      "grade": "B"
+    }
+  ]
+
+
+  ## 10. exportToSheets(TeacherService)
+  API endpoint: https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec
+  HTTP method: POST
+  Header: Content-Type - application/json
+
+    Body:
+    {
+    "data": [
+      ["Student ID", "Subject ID", "Teacher ID", "Score", "Grade"],
+      ["B032310505", "BITP 3253", "T001", "92", "A"],
+      ["B032310002", "BITP 3253", "T002", "11", "F"]
+    ]
+    }
+
+    Success response:
+    {
+    "url": "https://docs.google.com/spreadsheets/d/1j2iSfIegL9TgKW2rqatdpmaCqPSDTzkFy9daPAfdQAQ/edit"
+    }
+
+    Error response:
+    Status Code: 400 Bad Request
+    {
+      "message": "Invalid or missing 'data' array."
+    }
+
+
+## Implemented Security Measures:
   - Authentication is handled via a centralized login endpoint (/authentication.php).
   - User role-based access via the role field (student, teacher) in the login request.
   - JSON Payloads only; content-type is explicitly set to application/json.
