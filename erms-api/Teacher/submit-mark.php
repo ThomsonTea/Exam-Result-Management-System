@@ -18,6 +18,19 @@ try {
         echo json_encode(["message" => "Missing required fields."]);
         exit();
     }
+	
+	// Check if mark already exists for student & subject
+	$checkStmt = $db_conn->prepare("SELECT COUNT(*) FROM mark WHERE studentID = :studentID AND subjectID = :subjectID");
+	$checkStmt->bindParam(":studentID", $data->studentID);
+	$checkStmt->bindParam(":subjectID", $data->subjectID);
+	$checkStmt->execute();
+	$existingCount = $checkStmt->fetchColumn();
+
+	if ($existingCount > 0) {
+	    http_response_code(409); // Conflict
+	    echo json_encode(["message" => "This student already has a mark for this subject."]);
+	    exit();
+	}
 
     $stmt = $db_conn->prepare("INSERT INTO mark (studentID, subjectID, teacherID, score, grade) VALUES (:studentID, :subjectID, :teacherID, :score, :grade)");
     $stmt->bindParam(":studentID", $data->studentID);
@@ -47,7 +60,7 @@ try {
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     $response = curl_exec($ch);
     curl_close($ch);
-
+	
     echo json_encode(["message" => "Mark inserted and exported."]);
 
 } catch (PDOException $e) {
