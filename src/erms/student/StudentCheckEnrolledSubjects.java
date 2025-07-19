@@ -134,7 +134,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
                     root.put("table", tableArray);
 
                     // Call export and get the sheet URL
-                    String sheetUrl = TeacherService.exportToSheets(root);
+                    String sheetUrl = StudentService.exportToSheets(root);
 
                     SwingUtilities.invokeLater(() -> {
                         exportBtn.setEnabled(true);
