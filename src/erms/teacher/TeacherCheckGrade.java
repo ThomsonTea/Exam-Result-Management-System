@@ -66,7 +66,14 @@ public class TeacherCheckGrade extends JPanel {
 
 
         // Table model
-        tableModel = new DefaultTableModel(new String[]{"Student ID", "Subject ID", "Teacher ID", "Score", "Grade"}, 0);
+        tableModel = new DefaultTableModel(new String[]{"Student ID", "Subject ID", "Teacher ID", "Score", "Grade"}, 0) {
+        	private static final long serialVersionUID = 1L;
+
+			@Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         gradeTable = new JTable(tableModel);
         sorter = new TableRowSorter<>(tableModel);
         gradeTable.setRowSorter(sorter);
@@ -105,16 +112,27 @@ public class TeacherCheckGrade extends JPanel {
             new Thread(() -> {
                 try {
                     // Convert tableModel to JSON
-                    JSONArray tableArray = new JSONArray();
-                    for (int row = 0; row < tableModel.getRowCount(); row++) {
-                        JSONArray rowArray = new JSONArray();
-                        for (int col = 0; col < tableModel.getColumnCount(); col++) {
-                            Object cell = tableModel.getValueAt(row, col);
-                            rowArray.put(cell != null ? cell.toString() : "");
-                        }
-                        tableArray.put(rowArray);
-                    }
+                	JSONArray tableArray = new JSONArray();
 
+                	// ---- Add header row first
+                	JSONArray headerRow = new JSONArray();
+                	for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                	    headerRow.put(tableModel.getColumnName(col));
+                	}
+                	tableArray.put(headerRow);
+
+                	// ---- Add visible (filtered/sorted) rows
+                	for (int viewRow = 0; viewRow < gradeTable.getRowCount(); viewRow++) {
+                	    int modelRow = gradeTable.convertRowIndexToModel(viewRow);
+                	    JSONArray rowArray = new JSONArray();
+                	    for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                	        Object cell = tableModel.getValueAt(modelRow, col);
+                	        rowArray.put(cell != null ? cell.toString() : "");
+                	    }
+                	    tableArray.put(rowArray);
+                	}
+
+                	// --- Assign the data to JSONObject
                     JSONObject root = new JSONObject();
                     root.put("table", tableArray);
 

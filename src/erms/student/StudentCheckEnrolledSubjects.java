@@ -108,17 +108,28 @@ public class StudentCheckEnrolledSubjects extends JPanel {
 
             new Thread(() -> {
                 try {
-                    // Convert tableModel to JSON
-                    JSONArray tableArray = new JSONArray();
-                    for (int row = 0; row < tableModel.getRowCount(); row++) {
-                        JSONArray rowArray = new JSONArray();
-                        for (int col = 0; col < tableModel.getColumnCount(); col++) {
-                            Object cell = tableModel.getValueAt(row, col);
-                            rowArray.put(cell != null ? cell.toString() : "");
-                        }
-                        tableArray.put(rowArray);
-                    }
+                	// Convert tableModel to JSON
+                	JSONArray tableArray = new JSONArray();
 
+                	// ---- Add header row first
+                	JSONArray headerRow = new JSONArray();
+                	for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                	    headerRow.put(tableModel.getColumnName(col));
+                	}
+                	tableArray.put(headerRow);
+
+                	// ---- Add visible (filtered/sorted) rows
+                	for (int viewRow = 0; viewRow < subjectTable.getRowCount(); viewRow++) {
+                	    int modelRow = subjectTable.convertRowIndexToModel(viewRow);
+                	    JSONArray rowArray = new JSONArray();
+                	    for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                	        Object cell = tableModel.getValueAt(modelRow, col);
+                	        rowArray.put(cell != null ? cell.toString() : "");
+                	    }
+                	    tableArray.put(rowArray);
+                	}
+
+                	// --- Assign the data to JSONObject
                     JSONObject root = new JSONObject();
                     root.put("table", tableArray);
 
