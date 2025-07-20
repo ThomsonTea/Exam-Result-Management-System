@@ -85,9 +85,15 @@ public class TeacherMarkEntryPanel extends JPanel {
                     gradeField.setText("");
                     return;
                 }
+
                 int score = Integer.parseInt(scoreText);
+                if (score < 0 || score > 100) {
+                    gradeField.setText("");
+                    return;
+                }
+
                 String grade;
-                if (score >= 80) grade = "A";
+                if (score >= 80 ) grade = "A";
                 else if (score >= 70) grade = "B";
                 else if (score >= 60) grade = "C";
                 else if (score >= 50) grade = "D";
