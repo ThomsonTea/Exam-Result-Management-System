@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 public class AuthService {
 
-	private final JwtService jwtService = new JwtService();
     private static final String API_BASE_URL = "http://localhost/Exam-Result-Management-System/erms-api";
     private final HttpClient client = HttpClient.newHttpClient();
 

@@ -75,8 +75,6 @@ public class StudentViewMarkPanel extends JPanel {
      // Fetches the subjects the student is enrolled in and populates the dropdown.
     private void fetchSubjectsMarks() {
         try {
-            // REMOVED: No longer need to create a JSON object for the request.
-            // The new service method only needs the token.
             JSONArray subjects = StudentService.fetchSubjects(this.currentToken);
 
             for (int i = 0; i < subjects.length(); i++) {
@@ -102,8 +100,6 @@ public class StudentViewMarkPanel extends JPanel {
         String subjectID = selectedSubject.split(" - ")[0].trim();
 
         try {
-            // REMOVED: No longer need to create a JSON object for the request.
-            // The new service method takes the subjectID and token as separate arguments.
             JSONObject markObject = StudentService.fetchMark(subjectID, this.currentToken);
 
             if (markObject != null) {

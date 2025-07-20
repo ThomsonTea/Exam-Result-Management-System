@@ -123,20 +123,17 @@ public class TeacherMarkEntryPanel extends JPanel {
             JSONObject data = new JSONObject();
             data.put("studentID", studentID);
             data.put("subjectID", subjectID);
-            // REMOVED: No need to send teacherID, the server gets it from the token.
-            // data.put("teacherID", teacherID); 
+
             data.put("score", Integer.parseInt(score));
             data.put("grade", grade);
 
             try {
-                // CORRECTED CALL: Use the new service method with the token.
                 TeacherService.submitMark(data, this.currentToken);
                 JOptionPane.showMessageDialog(this, "✅ Mark submitted successfully.");
-                // Optionally clear fields after successful submission
+                
                 scoreField.setText("");
                 gradeField.setText("");
             } catch (Exception ex) {
-                // The exception from the service will now contain the specific error from the server.
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Submission Failed", JOptionPane.ERROR_MESSAGE);
             }
         });
