@@ -63,7 +63,7 @@ DEVELOPMENT TEAM:
 
    4.3) After that, open the `C:\xampp\htdocs\Exam-Result-Management-System\erms-api` path in terminal and run `composer install`. It will install the `firebase/php-jwt` which is the dependency for using `JWT Token`.
    
-   4.2) Then, continuing from the Eclipse IDE, right-click the repo in Git Repositories `view > Import Projects` (to make it show in package explorer)
+   4.4) Then, continuing from the Eclipse IDE, right-click the repo in Git Repositories `view > Import Projects` (to make it show in package explorer)
 6) Run the erms_db.sql file into your database query to clone the dummy data and db structure.
 7) Check the database connection credential to ensure it's correct (database.pgp at directory of erms-api folder.
 8) All setup completed, now run the MainApp.java as java application (under src > erms package)
