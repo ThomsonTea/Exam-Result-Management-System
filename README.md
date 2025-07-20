@@ -705,7 +705,7 @@ This design promotes:
 ## Business Logic and Data Validation
 
 ### Flowchart of the System
-<img width="331" height="612" alt="image" src="https://github.com/user-attachments/assets/9972bbcc-404e-46ea-a383-496ff6c74bfd" />
+<img width="491" height="900" alt="image" src="https://github.com/user-attachments/assets/1fa8c60e-3fc5-4da8-b553-90a2a86fae27" />
 
 ### Data Validation
 Describe the validation rules implemented on both the frontend (e.g., checking for empty fields) and backend (e.g., ensuring an email is unique).
