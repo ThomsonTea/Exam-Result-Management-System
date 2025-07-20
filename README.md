@@ -100,8 +100,9 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       "role": "student"
     }
 
-  
+  ``
     Success response:
+    
     Status Code: 200 OK
     {
         "message": "Login successful.",
@@ -109,17 +110,16 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
         "name": "HARIS A/L R SURESH"
     }
 
-  
+    
   Error response:
+```
   Status Code: 401 Unauthorized
-  ```json
   {
       "message": "Invalid ID or password2."
   }
-```
+
     
   Status Code: 400 Bad Request
-```json
   {
       "message": "User ID, password, and role are required."
   }
@@ -141,14 +141,16 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       ["BITP 3253", "Software Validation and Verification", "11", "F", "T002"]
     ]
     }
-  
+  `
     Success response:
+    
     Status Code: 200 OK
     {
       "url": "https://docs.google.com/spreadsheets/d/1sof4dRyJEy851qU06cyvnu55_FzfsbMgITAiejEkhoM/edit"
     }
-    
+   ` 
     Error response:
+    
     Status Code: 400 Bad Request
     {
       "message": "Invalid or missing 'data' array."
@@ -165,8 +167,9 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
     {
     "studentID": "B032310523"
     }
-    
+`
     Success response:
+    
     Status Code: 200 OK
     [
       {
@@ -178,8 +181,10 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
           "subjectName": " Software Validation and Verification"
       }
     ]
-    
+
+  `
     Error response:
+    
     Status Code: 400 Bad Request
     {
       "message": "studentID is required"
@@ -197,8 +202,9 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       "studentID": "B032310523",
       "subjectID": "BITP 2223"
     }
-      
+`
     Success response:
+    
     Status Code: 200 OK
     [
       {
@@ -206,8 +212,9 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
           "grade": "B"
       }
     ]
-    
+`
     Error response:
+    
     Status Code: 400 Bad Request
     {
       "message": "Both studentID and subjectID are required"
@@ -224,8 +231,10 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
     {
       "studentID": "B032310523"
     }
-  
+
+  `
     Success response:
+    
     Status Code: 200 OK
      [
         {
@@ -243,8 +252,10 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
             "teacherID": "T002"
         }
     ]
-    
+
+  `
     Error response:
+    
     Status Code: 400 Bad Request
     {
         "message": "studentID is required"
@@ -254,8 +265,10 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-students.php
   
   HTTP method: GET
-    
+
+  `
     Success response:
+    
     Status Code: 200 OK
     [
       {
@@ -268,19 +281,22 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       }
     ]
 
-## 7. fetchSubjects (TeacherService)
+  ## 7. fetchSubjects (TeacherService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-subjects.php
- 
-    HTTP method: POST
-    
-    Header: Content-Type - application/json
+   
+  HTTP method: POST
+      
+  Header: Content-Type - application/json
     
     Body:
     {
       "teacherID": "T003"
     }
-  
+
+
+`
     Success response:
+    
     Status Code: 200 OK
       [
       {
@@ -292,8 +308,10 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
           "subjectName": "Mobile Application Development"
       }
     ]
-    
+
+  `
     Error response:
+    
     Status Code: 400 Bad Request
     {
       "message": "teacherID is required"
@@ -314,14 +332,18 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
     "score": 88,
     "grade": "A"
     }
-  
+
+  `
     Success response:
+    
     Status Code: 200 OK
     {
       "message": "Mark inserted and exported."
     }
-    
+
+  `
     Error response:
+    
     Status Code: 400 Bad Request
     {
       "message": "Missing required fields."
@@ -346,8 +368,10 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
 
     Body:
     No Body Required
-  
+
+  `
     Success response:
+    
     Status Code: 200 OK
       [
       {
@@ -382,13 +406,18 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       ["B032310002", "BITP 3253", "T002", "11", "F"]
     ]
     }
-  
+
+  `
     Success response:
+    
+    Status Code: 200 OK
     {
     "url": "https://docs.google.com/spreadsheets/d/1j2iSfIegL9TgKW2rqatdpmaCqPSDTzkFy9daPAfdQAQ/edit"
     }
 
+  `
     Error response:
+    
     Status Code: 400 Bad Request
     {
       "message": "Invalid or missing 'data' array."
