@@ -704,8 +704,8 @@ This design promotes:
 
 ## Business Logic and Data Validation
 
-### Use Case Diagrams/Flowcharts
-Illustrate the main user flows, such as "selecting a book," "borrowing a book," and "returning a book." This visually demonstrates the business logic.
+### Flowchart of the System
+<img width="331" height="612" alt="image" src="https://github.com/user-attachments/assets/9972bbcc-404e-46ea-a383-496ff6c74bfd" />
 
 ### Data Validation
 Describe the validation rules implemented on both the frontend (e.g., checking for empty fields) and backend (e.g., ensuring an email is unique).
