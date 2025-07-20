@@ -100,7 +100,7 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
       "role": "student"
     }
 
-  ``
+  `
     Success response:
     
     Status Code: 200 OK
