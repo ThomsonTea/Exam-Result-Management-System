@@ -17,9 +17,13 @@ public class TeacherMarkEntryPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JComboBox<String> studentDropdown, subjectDropdown;
     private String teacherID;
+    private final AuthService authService;
+    private final String currentToken;
 
-    public TeacherMarkEntryPanel(String teacherID) {
+    public TeacherMarkEntryPanel(String teacherID, AuthService service, String token) {
         this.teacherID = teacherID;
+        this.authService = service;
+        this.currentToken = token;
 
         setLayout(new BorderLayout());
 
@@ -98,10 +102,14 @@ public class TeacherMarkEntryPanel extends JPanel {
         });
 
         submitBtn.addActionListener(e -> {
-        	String studentSelection = (String) studentDropdown.getSelectedItem();
+            String studentSelection = (String) studentDropdown.getSelectedItem();
             String subjectSelection = (String) subjectDropdown.getSelectedItem();
 
-            // Extract only the ID (before " - ")
+            if (studentSelection == null || subjectSelection == null) {
+                JOptionPane.showMessageDialog(this, "Please make a selection for both student and subject.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             String studentID = studentSelection.split(" - ")[0];
             String subjectID = subjectSelection.split(" - ")[0];
             String score = scoreField.getText().trim();
@@ -115,21 +123,18 @@ public class TeacherMarkEntryPanel extends JPanel {
             JSONObject data = new JSONObject();
             data.put("studentID", studentID);
             data.put("subjectID", subjectID);
-            data.put("teacherID", teacherID);
+
             data.put("score", Integer.parseInt(score));
             data.put("grade", grade);
-            
-            System.out.print("data: " + data);
 
             try {
-                boolean result = TeacherService.submitMark(data);
-                if (result) {
-                    JOptionPane.showMessageDialog(this, "✅ Mark submitted successfully.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "❌ Submission failed. The student might already have a mark for this subject.");
-                }
+                TeacherService.submitMark(data, this.currentToken);
+                JOptionPane.showMessageDialog(this, "✅ Mark submitted successfully.");
+                
+                scoreField.setText("");
+                gradeField.setText("");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Submission Failed", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -141,14 +146,15 @@ public class TeacherMarkEntryPanel extends JPanel {
 
     private void fetchDropdownData() {
         try {
-            JSONArray students = TeacherService.fetchStudents();
+            // Call the new secure methods that only require the token
+            JSONArray students = TeacherService.fetchStudents(this.currentToken);
             for (int i = 0; i < students.length(); i++) {
                 JSONObject student = students.getJSONObject(i);
                 String display = student.getString("studentID") + " - " + student.getString("studentName");
                 studentDropdown.addItem(display);
             }
 
-            JSONArray subjects = TeacherService.fetchSubjects(teacherID);
+            JSONArray subjects = TeacherService.fetchSubjects(this.currentToken);
             for (int i = 0; i < subjects.length(); i++) {
                 JSONObject subject = subjects.getJSONObject(i);
                 String display = subject.getString("subjectID") + " - " + subject.getString("subjectName");
@@ -156,7 +162,7 @@ public class TeacherMarkEntryPanel extends JPanel {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "⚠️ Failed to fetch data: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "⚠️ Failed to fetch initial data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

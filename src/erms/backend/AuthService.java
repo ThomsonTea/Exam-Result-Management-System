@@ -12,13 +12,11 @@ public class AuthService {
     private final HttpClient client = HttpClient.newHttpClient();
 
     public JSONObject login(String userid, String password, String role) throws ApiException {
-        // Create a JSON object for the request body
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("userid", userid);
         jsonBody.put("password", password);
         jsonBody.put("role", role);
 
-        // Build the HTTP request
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_BASE_URL + "/authentication.php"))
                 .header("Content-Type", "application/json")
@@ -26,7 +24,6 @@ public class AuthService {
                 .build();
         
         try {
-            // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             
             System.out.println("Login response status: " + response.statusCode());
@@ -34,9 +31,10 @@ public class AuthService {
             
             JSONObject responseJson = new JSONObject(response.body());
 
-            // Check the HTTP status code from the server
             if (response.statusCode() == 200) {
+
             	return responseJson;
+            	
             } else {
                 String errorMessage = responseJson.optString("message", "An unknown server error occurred.");
                 throw new ApiException(errorMessage);
@@ -53,5 +51,38 @@ public class AuthService {
                 // This is for other unexpected problems, like a malformed JSON response.
                 throw new ApiException("An unexpected error occurred: " .concat(ex.getMessage()), ex);
             }
+    }
+    
+    public Boolean logout(String currentToken) throws ApiException {
+    	
+        if (currentToken == null || currentToken.isEmpty()) {
+            throw new ApiException("No token provided for logout.");
+        }
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_BASE_URL + "/logout.php"))
+                .header("Authorization", "Bearer " + currentToken) 
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+                
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            
+            System.out.println("Logout response status: " + response.statusCode());
+            System.out.println("Logout response body: " + response.body());
+
+            if (response.statusCode() != 200) {
+                JSONObject responseJson = new JSONObject(response.body());
+                String errorMessage = responseJson.optString("message", "An unknown error occurred during logout.");
+                throw new ApiException(errorMessage);
+            }
+            // If status is 200, logout was successful.
+            return true;
+
+        } catch (java.io.IOException | InterruptedException ex) {
+            throw new ApiException("Could not connect to the server for logout.", ex);
+        } catch (Exception ex) {
+            throw new ApiException("An unexpected error occurred during logout: " + ex.getMessage(), ex);
+        }
     }
 }

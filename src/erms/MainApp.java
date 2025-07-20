@@ -86,15 +86,16 @@ public class MainApp {
                 // Extract id and name from response
                 String id = response.getString("id");
                 String name = response.getString("name");
+                String token = response.getString("token");
 
                 System.out.println("Logged in as: " + name + " (ID: " + id + ")");
 
                 loginFrame.dispose();
 
                 if (role.equals("Teacher")) {
-                    openTeacherView(id, name);
+                    openTeacherView(id, name, authService, token);
                 } else {
-                    openStudentView(id, name);
+                    openStudentView(id, name, authService, token);
                 }
             } catch (ApiException ex) {
                 JOptionPane.showMessageDialog(loginFrame, ex.getMessage(), "Login Failed", JOptionPane.ERROR_MESSAGE);
@@ -102,22 +103,21 @@ public class MainApp {
         });
     }
 
-    private void openTeacherView(String id, String name) {
+    private void openTeacherView(String id, String name, AuthService authService, String token) {
         JFrame frame = new JFrame("Teacher Dashboard");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 500);
         frame.setLocationRelativeTo(null);
-        frame.setContentPane(new TeacherMainMenu(id, name));
+        frame.setContentPane(new TeacherMainMenu(id, name, authService, token));
         frame.setVisible(true);
     }
 
-    // replace the actual student UI inside this function below 
-    private void openStudentView(String id, String name) {
+    private void openStudentView(String id, String name, AuthService authService, String token) {
         JFrame frame = new JFrame("Student Dashboard");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
-        frame.setContentPane(new StudentMainMenu(id, name));
+        frame.setContentPane(new StudentMainMenu(id, name, authService, token));
         frame.setVisible(true);
 
         frame.setVisible(true);
