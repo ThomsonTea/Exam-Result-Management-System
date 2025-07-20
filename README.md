@@ -112,14 +112,18 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
   
   Error response:
   Status Code: 401 Unauthorized
+  ```json
   {
       "message": "Invalid ID or password2."
   }
+```
     
   Status Code: 400 Bad Request
+```json
   {
       "message": "User ID, password, and role are required."
   }
+```
 
 ## 2. exportToSheets(Student Service)
   API endpoint: https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec
