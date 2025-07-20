@@ -1,5 +1,6 @@
 package erms.teacher;
 
+import erms.backend.AuthService;
 import erms.backend.TeacherService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,9 +24,14 @@ public class TeacherCheckGrade extends JPanel {
     private TableRowSorter<DefaultTableModel> sorter;
     private String teacherID;
     private JSONArray marks;
+    private final AuthService authService;
+    private final String currentToken;
 
-    public TeacherCheckGrade(String teacherID) {
+    public TeacherCheckGrade(String teacherID, AuthService service, String token) {
         this.teacherID = teacherID;
+        this.authService = service;
+        this.currentToken = token;
+        
         setLayout(new BorderLayout());
 
         // Top panel
@@ -66,14 +72,7 @@ public class TeacherCheckGrade extends JPanel {
 
 
         // Table model
-        tableModel = new DefaultTableModel(new String[]{"Student ID", "Subject ID", "Teacher ID", "Score", "Grade"}, 0) {
-        	private static final long serialVersionUID = 1L;
-
-			@Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        tableModel = new DefaultTableModel(new String[]{"Student ID", "Subject ID", "Teacher ID", "Score", "Grade"}, 0);
         gradeTable = new JTable(tableModel);
         sorter = new TableRowSorter<>(tableModel);
         gradeTable.setRowSorter(sorter);
@@ -106,22 +105,20 @@ public class TeacherCheckGrade extends JPanel {
                 
         // Export button (is disabled first before tableModel is populated)
         exportBtn.addActionListener(e -> {
-            exportBtn.setEnabled(false); // Disable while creating
+            exportBtn.setEnabled(false);
             exportBtn.setText("Generating...");
 
             new Thread(() -> {
                 try {
-                    // Convert tableModel to JSON
+                	// Convert tableModel to JSON
                 	JSONArray tableArray = new JSONArray();
 
-                	// ---- Add header row first
                 	JSONArray headerRow = new JSONArray();
                 	for (int col = 0; col < tableModel.getColumnCount(); col++) {
                 	    headerRow.put(tableModel.getColumnName(col));
                 	}
                 	tableArray.put(headerRow);
 
-                	// ---- Add visible (filtered/sorted) rows
                 	for (int viewRow = 0; viewRow < gradeTable.getRowCount(); viewRow++) {
                 	    int modelRow = gradeTable.convertRowIndexToModel(viewRow);
                 	    JSONArray rowArray = new JSONArray();
@@ -132,7 +129,6 @@ public class TeacherCheckGrade extends JPanel {
                 	    tableArray.put(rowArray);
                 	}
 
-                	// --- Assign the data to JSONObject
                     JSONObject root = new JSONObject();
                     root.put("table", tableArray);
 
@@ -178,7 +174,7 @@ public class TeacherCheckGrade extends JPanel {
             subjectFilter.removeAllItems();
             subjectFilter.addItem("All");
 
-            marks = TeacherService.fetchMarks(teacherID);
+            marks = TeacherService.fetchMarks(this.currentToken);
             Set<String> subjects = new HashSet<>();
 
             for (int i = 0; i < marks.length(); i++) {
@@ -193,15 +189,13 @@ public class TeacherCheckGrade extends JPanel {
                 subjects.add(subjectID);
             }
 
-            // Add unique subjects to filter dropdown
-            for (String sub : subjects) {
-                subjectFilter.addItem(sub);
-            }
+            subjects.stream().sorted().forEach(subjectFilter::addItem);
             
             // Enable export button only if table has rows
             if (tableModel.getRowCount() > 0) {
                 exportBtn.setEnabled(true);
             }
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "❌ Failed to load marks: " + e.getMessage());
         }

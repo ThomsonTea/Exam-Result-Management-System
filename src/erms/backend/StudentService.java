@@ -55,97 +55,63 @@ public class StudentService {
 
 	
 	// fetch enrolled subjects for "View Marks/Grades" dropdown.
-	public static JSONArray fetchSubjects(JSONObject data) throws Exception {
-	    URL url = new URL(API_BASE + "/Student/fetch-enrolled-subjects-marks.php");
-	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	    conn.setRequestMethod("POST");
-	    conn.setRequestProperty("Content-Type", "application/json");
-	    conn.setDoOutput(true);
-
-	    // Send JSON body
-	    try (OutputStream os = conn.getOutputStream()) {
-	        os.write(data.toString().getBytes("UTF-8"));
-	        os.flush();
-	    }
-
-	    int responseCode = conn.getResponseCode();
-	    if (responseCode != 200) {
-	        throw new RuntimeException("Failed: HTTP error code : " + responseCode);
-	    }
-
-	    // Read response
-	    StringBuilder response = new StringBuilder();
-	    try (Scanner scanner = new Scanner(conn.getInputStream())) {
-	        while (scanner.hasNextLine()) {
-	            response.append(scanner.nextLine());
-	        }
-	    }
-
-	    conn.disconnect();
-	    return new JSONArray(response.toString());
-	}
+	public static JSONArray fetchSubjects(String currentToken) throws Exception {
+        // Get the raw string response from the server.
+        String responseString = executePostRequest("/Student/fetch-enrolled-subjects-marks.php", "{}", currentToken);
+        // Parse the string into a JSONArray and return it.
+        return new JSONArray(responseString);
+    }
 
 
     
      // Fetches the specific mark for a student in a given subject.
-    public static JSONArray fetchMarks(JSONObject data) throws Exception {
-    	URL url = new URL(API_BASE + "/Student/fetch-subject-mark.php");
-	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	    conn.setRequestMethod("POST");
-	    conn.setRequestProperty("Content-Type", "application/json");
-	    conn.setDoOutput(true);
-
-	    // Send JSON body
-	    try (OutputStream os = conn.getOutputStream()) {
-	        os.write(data.toString().getBytes("UTF-8"));
-	        os.flush();
-	    }
-
-	    int responseCode = conn.getResponseCode();
-	    if (responseCode != 200) {
-	        throw new RuntimeException("Failed: HTTP error code : " + responseCode);
-	    }
-
-	    // Read response
-	    StringBuilder response = new StringBuilder();
-	    try (Scanner scanner = new Scanner(conn.getInputStream())) {
-	        while (scanner.hasNextLine()) {
-	            response.append(scanner.nextLine());
-	        }
-	    }
-
-	    conn.disconnect();
-	    return new JSONArray(response.toString());
+	public static JSONObject fetchMark(String subjectID, String currentToken) throws Exception {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("subjectID", subjectID);
+        
+        String responseString = executePostRequest("/Student/fetch-subject-mark.php", requestBody.toString(), currentToken);
+        return new JSONObject(responseString);
     }
     
     // Fetch all subjects that are enrolled by current student
-    public static JSONArray fetchEnrolledSubjects(JSONObject data) throws Exception {
-    	URL url = new URL(API_BASE + "/Student/fetch-enrolled-subjects.php");
-	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	    conn.setRequestMethod("POST");
-	    conn.setRequestProperty("Content-Type", "application/json");
-	    conn.setDoOutput(true);
+	public static JSONArray fetchEnrolledSubjects(String currentToken) throws Exception {
+        // Get the raw string response.
+        String responseString = executePostRequest("/Student/fetch-enrolled-subjects.php", "{}", currentToken);
+        // Parse it into a JSONArray.
+        return new JSONArray(responseString);
+    }
+	
+	private static String executePostRequest(String endpoint, String jsonBody, String token) throws Exception {
+        URL url = new URL(API_BASE + endpoint);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + token);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
 
-	    // Send JSON body
-	    try (OutputStream os = conn.getOutputStream()) {
-	        os.write(data.toString().getBytes("UTF-8"));
-	        os.flush();
-	    }
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(jsonBody.getBytes("UTF-8"));
+            os.flush();
+        }
 
-	    int responseCode = conn.getResponseCode();
-	    if (responseCode != 200) {
-	        throw new RuntimeException("Failed: HTTP error code : " + responseCode);
-	    }
+        int responseCode = conn.getResponseCode();
 
-	    // Read response
-	    StringBuilder response = new StringBuilder();
-	    try (Scanner scanner = new Scanner(conn.getInputStream())) {
-	        while (scanner.hasNextLine()) {
-	            response.append(scanner.nextLine());
-	        }
-	    }
+        InputStreamReader reader = new InputStreamReader(responseCode >= 400 ? conn.getErrorStream() : conn.getInputStream());
+        StringBuilder response = new StringBuilder();
+        try (Scanner scanner = new Scanner(reader)) {
+            while (scanner.hasNextLine()) {
+                response.append(scanner.nextLine());
+            }
+        }
+        
+        conn.disconnect();
 
-	    conn.disconnect();
-	    return new JSONArray(response.toString());
+        if (responseCode != 200) {
+            JSONObject errorJson = new JSONObject(response.toString());
+            String errorMessage = errorJson.optString("message", "An unknown error occurred.");
+            throw new RuntimeException("Failed: HTTP " + responseCode + " - " + errorMessage);
+        }
+
+        return response.toString();
     }
 }

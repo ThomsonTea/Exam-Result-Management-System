@@ -35,28 +35,39 @@ DEVELOPMENT TEAM:
   - Student login
   - Result retrieval
   - Manual export to Google Sheets
+ 
+## Requirements to run the program:
+1) Web Server: `XAMPP`, `Laragon`, etc.
+2) Java Eclipse IDE.
+3) Composer (to install `firebase/php-jwt` package).
   
 ## How to clone and run the program in your local side
+1) Install Composer package manager from https://getcomposer.org/download/ if you do not have it yet.
 1) Copy the HTTPS or SSH URL of the Git repository 
 2) Open Eclipse and Go to Git Perspective :
 
-   2.1) Click on Window > Perspective > Open Perspective > Other...
+   2.1) Click on `Window > Perspective > Open Perspective > Other...`
 
-   2.2) Select Git and click OK
+   2.2) Select `Git` and click `OK`
 3) Clone the Git Repository
 
-   3.1) In the Git Repositories view, right-click > Clone a Git Repository
+   3.1) In the Git Repositories view, `right-click > Clone a Git Repository`
 
    3.2) Paste the repository URL and click Next
 4) Import the Project into Eclipse
 
-   4.1) Choose the directory where you want the project stored locally (**choose htdocs if using xampp**, not sure if using Workbench need explore yourself)
+   4.1) Choose the directory where you want the project to stored locally.
 
-   4.2) Right-click the repo in Git Repositories view > Import Projects (to make it show in package explorer)
-5) Run the erms_db.sql file into your database query to clone the dummy data and db structure.
-6) Check the database connection credential to ensure it's correct (database.pgp at directory of erms-api folder.
-7) All setup completed, now run the MainApp.java as java application (under src > erms package)
-8) You should see the login asking screen, then can proceed.
+   4.2) From the imported project folder, find `emrs-api` folder and copy and paste it on your web server's document root. If you use `XAMPP`, you should paste in in the following path:
+   `C:\xampp\htdocs\Exam-Result-Management-System`. Make sure `.htaccess` file is also included. It is recommended to copy and paste the folder via window's file explorer.
+
+   4.3) After that, open the `C:\xampp\htdocs\Exam-Result-Management-System\erms-api` path in terminal and run `composer install`. It will install the `firebase/php-jwt` which is the dependency for using `JWT Token`.
+   
+   4.4) Then, continuing from the Eclipse IDE, right-click the repo in Git Repositories `view > Import Projects` (to make it show in package explorer)
+6) Run the erms_db.sql file into your database query to clone the dummy data and db structure.
+7) Check the database connection credential to ensure it's correct (database.pgp at directory of erms-api folder.
+8) All setup completed, now run the MainApp.java as java application (under src > erms package)
+9) You should see the login asking screen, then can proceed.
 
 
 ### Current dummy data for teacher/student login
@@ -88,90 +99,96 @@ We integrate our software with the Google Sheets API to enable teachers and stud
 - Web Server - PHP-based backend (API hosted in /erms-api/)
 
 ## 1. login(AuthService)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api//authentication.php
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api//authentication.php`
   
-  HTTP method: POST
+  HTTP method: `POST`
   
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
 
-    Body:
+  Body:
+    
     {
       "userid": "B032310523",
       "password": "12345678",
       "role": "student"
     }
 
-  `
-    Success response:
+  **Success response:**
     
-    Status Code: 200 OK
+  Status Code: `200 OK`
+  
     {
         "message": "Login successful.",
         "id": "B032310523",
         "name": "HARIS A/L R SURESH"
     }
+ 
+  **Error response:**
 
-`  
-  Error response:
-```
-  Status Code: 401 Unauthorized
-  {
-      "message": "Invalid ID or password2."
-  }
+  Status Code: `401 Unauthorized`
+  
+    {
+        "message": "Invalid ID or password2."
+    }
 
     
-  Status Code: 400 Bad Request
-  {
-      "message": "User ID, password, and role are required."
-  }
-```
+  Status Code: `400 Bad Request`
+  
+    {
+        "message": "User ID, password, and role are required."
+    }
 
 ## 2. exportToSheets(Student Service)
-  API endpoint: https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec
+  API endpoint: `https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec`
   
-  HTTP method: POST
+  HTTP method: `POST`
  
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
   
-    Body:
-    {
-    "data": [
-      ["Subject ID", "Subject Name", "Score", "Grade", "Teacher ID"],
-      ["BITP 3123", "Distributed Application Development", "92", "A", "T003"],
-      ["BITP 2223", "Software Requirement and Design", "55", "D", "T001"],
-      ["BITP 3253", "Software Validation and Verification", "11", "F", "T002"]
-    ]
-    }
-  `
-    Success response:
+  Body:
     
-    Status Code: 200 OK
+    {
+      "data": [
+        ["Subject ID", "Subject Name", "Score", "Grade", "Teacher ID"],
+        ["BITP 3123", "Distributed Application Development", "92", "A", "T003"],
+        ["BITP 2223", "Software Requirement and Design", "55", "D", "T001"],
+        ["BITP 3253", "Software Validation and Verification", "11", "F", "T002"]
+      ]
+    }
+    
+  **Success response:**
+    
+  Status Code: `200 OK`
+  
     {
       "url": "https://docs.google.com/spreadsheets/d/1sof4dRyJEy851qU06cyvnu55_FzfsbMgITAiejEkhoM/edit"
     }
-   ` 
-    Error response:
+
+  **Error response:**
     
-    Status Code: 400 Bad Request
+  Status Code: `400 Bad Request`
+  
     {
       "message": "Invalid or missing 'data' array."
     }
 
 ## 3. fetchSubjects(TeacherService)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects-marks.php
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects-marks.php`
   
-  HTTP method: POST
+  HTTP method: `POST`
  
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
   
-    Body:
+  Body:
+    
     {
     "studentID": "B032310523"
     }
-`
-    Success response:
     
-    Status Code: 200 OK
+  **Success response:**
+    
+  Status Code: `200 OK`
+  
     [
       {
           "subjectID": "BITP 2223",
@@ -183,60 +200,64 @@ We integrate our software with the Google Sheets API to enable teachers and stud
       }
     ]
 
-  `
-    Error response:
+  **Error response:**
     
-    Status Code: 400 Bad Request
+  Status Code: `400 Bad Request`
+  
     {
       "message": "studentID is required"
     }
 
   ## 4. fetchMarks(Student Service)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-subject-mark.php
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-subject-mark.php`
   
-  HTTP method: POST
+  HTTP method: `POST`
   
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
   
-    Body:
+  Body:
+    
     {
       "studentID": "B032310523",
       "subjectID": "BITP 2223"
     }
-`
-    Success response:
     
-    Status Code: 200 OK
+  **Success response:**
+    
+  Status Code: `200 OK`
+  
     [
       {
           "score": 78,
           "grade": "B"
       }
     ]
-`
-    Error response:
     
-    Status Code: 400 Bad Request
+  **Error response:**
+    
+  Status Code: `400 Bad Request`
+  
     {
       "message": "Both studentID and subjectID are required"
     }
 
   ## 5. fetchEnrolledSubjects(Student Service)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects.php
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/Student/fetch-enrolled-subjects.php`
   
-  HTTP method: POST
+  HTTP method: `POST`
   
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
   
-    Body:
+  Body:
+    
     {
       "studentID": "B032310523"
     }
 
-  `
-    Success response:
+  **Success response:**
     
-    Status Code: 200 OK
+  Status Code: `200 OK`
+  
      [
         {
             "subjectID": "BITP 2223",
@@ -254,23 +275,23 @@ We integrate our software with the Google Sheets API to enable teachers and stud
         }
     ]
 
-  `
-    Error response:
+  **Error response:**
     
-    Status Code: 400 Bad Request
+  Status Code: `400 Bad Request`
+
     {
         "message": "studentID is required"
     }
 
   ## 6. fetchStudents(TeacherService)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-students.php
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-students.php`
   
-  HTTP method: GET
+  HTTP method: `GET`
 
-  `
-    Success response:
+  **Success response:**
     
-    Status Code: 200 OK
+  Status Code: `200 OK`
+  
     [
       {
           "studentID": "B032310002",
@@ -281,25 +302,24 @@ We integrate our software with the Google Sheets API to enable teachers and stud
           "studentName": "KISHAH A/P PRAKHASH"
       }
     ]
-
+  
   ## 7. fetchSubjects (TeacherService)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-subjects.php
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-subjects.php`
    
-  HTTP method: POST
+  HTTP method: `POST`
       
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
     
     Body:
     {
       "teacherID": "T003"
     }
 
-
-`
-    Success response:
+  **Success response:**
     
-    Status Code: 200 OK
-      [
+  Status Code: `200 OK`
+  
+    [
       {
           "subjectID": "BITP 3123",
           "subjectName": " Distributed Application Development"
@@ -310,22 +330,23 @@ We integrate our software with the Google Sheets API to enable teachers and stud
       }
     ]
 
-  `
-    Error response:
+  **Error response:**
     
-    Status Code: 400 Bad Request
+  Status Code: `400 Bad Request`
+  
     {
       "message": "teacherID is required"
     }
 
   ## 8. submitMark(Teacher Service)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-subjects.php
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-subjects.php`
   
-  HTTP method: POST
+  HTTP method: `POST`
   
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
   
-    Body:
+  Body:
+    
     {
     "studentID": "B032310523",
     "subjectID": "BITP 3453",
@@ -334,18 +355,18 @@ We integrate our software with the Google Sheets API to enable teachers and stud
     "grade": "A"
     }
 
-  `
-    Success response:
+  **Success response:**
     
-    Status Code: 200 OK
+  Status Code: `200 OK`
+  
     {
       "message": "Mark inserted and exported."
     }
 
-  `
-    Error response:
+  **Error response:**
     
-    Status Code: 400 Bad Request
+  Status Code: `400 Bad Request`
+  
     {
       "message": "Missing required fields."
     }
@@ -361,20 +382,21 @@ We integrate our software with the Google Sheets API to enable teachers and stud
     }
 
   ## 9. fetchMarks (TeacherService)
-  API endpoint: http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-marks.php?teacherID=" + teacherID
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/Teacher/fetch-marks.php?teacherID=" + teacherID`
  
-  HTTP method: GET
+  HTTP method: `GET`
   
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
 
-    Body:
+  Body:
+  
     No Body Required
 
-  `
-    Success response:
+  **Success response:**
     
-    Status Code: 200 OK
-      [
+  Status Code: `200 OK`
+  
+    [
       {
         "studentID": "B032310505",
         "subjectID": "BITP 3253",
@@ -393,42 +415,153 @@ We integrate our software with the Google Sheets API to enable teachers and stud
 
 
   ## 10. exportToSheets(TeacherService)
-  API endpoint: https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec
+  API endpoint: `https://script.google.com/macros/s/AKfycbzFxLauWg_r8wDN3WV9LbT2UUW6sdfe5-NZ9TJTHk4_4a5edYS5j37qWUXk071RX6le/exec`
   
-  HTTP method: POST
+  HTTP method: `POST`
   
-  Header: Content-Type - application/json
+  Header: `Content-Type - application/json`
   
-    Body:
+  Body:
+    
     {
-    "data": [
-      ["Student ID", "Subject ID", "Teacher ID", "Score", "Grade"],
-      ["B032310505", "BITP 3253", "T001", "92", "A"],
-      ["B032310002", "BITP 3253", "T002", "11", "F"]
-    ]
+      "data": [
+        ["Student ID", "Subject ID", "Teacher ID", "Score", "Grade"],
+        ["B032310505", "BITP 3253", "T001", "92", "A"],
+        ["B032310002", "BITP 3253", "T002", "11", "F"]
+      ]
     }
 
-  `
-    Success response:
+  **Success response:**
     
-    Status Code: 200 OK
+  Status Code: `200 OK`
+  
     {
     "url": "https://docs.google.com/spreadsheets/d/1j2iSfIegL9TgKW2rqatdpmaCqPSDTzkFy9daPAfdQAQ/edit"
     }
 
-  `
-    Error response:
+  **Error response:**
     
-    Status Code: 400 Bad Request
+  Status Code: `400 Bad Request`
+  
     {
       "message": "Invalid or missing 'data' array."
+    }
+
+  ## 11. generateToken (JwtService)
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/jwt/generate_token.php`
+  
+  HTTP method: `POST`
+  
+  Header: `Content-Type - application/json`
+  
+  Body:
+    
+    {
+        "userid": "B032310002",
+        "password": "12345678",
+        "role": "student"
+    }
+
+  **Success response:**
+    
+  Status Code: `200 OK`
+  
+    {
+        "message": "Token generated successfully.",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTMwMTczMzYsImV4cCI6MTc1MzEwMzczNiwiZGF0YSI6eyJ1c2VyaWQiOiJCMDMyMzEwMDAyIiwicm9sZSI6InN0dWRlbnQifX0.hgRECmzGl_ADk8S3G1agXcADP2B_j-k477wwqsVeiv8"
+    }
+
+  **Error response:**
+    
+  Status Code: `400 Bad Request`
+  
+    {
+        "message": "Incomplete data. 'userid', password and 'role' are required."
+    }
+
+  ## 12. validateToken (JwtService)
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/jwt/validate_token.php`
+  
+  HTTP method: `POST`
+  
+  Header: `Authorization - Bearer<token>`
+  
+  Token Example:
+    
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTMwMTczMzYsImV4cCI6MTc1MzEwMzczNiwiZGF0YSI6eyJ1c2VyaWQiOiJCMDMyMzEwMDAyIiwicm9sZSI6InN0dWRlbnQifX0.hgRECmzGl_ADk8S3G1agXcADP2B_j-k477wwqsVeiv8
+
+  **Success response:**
+    
+  Status Code: `200 OK`
+    
+    {
+        "message": "Access granted.",
+        "data": {
+            "userid": "B032310002",
+            "role": "student"
+        }
+    }
+
+  **Error response:**
+    
+  Status Code: `400 Bad Request`
+  
+    {
+        "message": "Incomplete data. 'userid', password and 'role' are required."
+    }
+
+  Status Code: `401 Unauthorized`
+  
+    {
+        "message": "Access denied. Invalid token.",
+        "error": "Syntax error, malformed JSON"
+    }
+
+  Status Code: `401 Unauthorized`
+  
+    {
+        "message": "Access denied. No token provided."
+    }
+    
+  ## 13. logout (AuthService)
+  API endpoint: `http://localhost/Exam-Result-Management-System/erms-api/logout.php`
+  
+  HTTP method: `POST`
+  
+  Header: `Authorization - Bearer<token>`
+  
+  Token Example:
+  
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTMwMTc2NDMsImV4cCI6MTc1MzEwNDA0MywiZGF0YSI6eyJ1c2VyaWQiOiJCMDMyMzEwMDAyIiwicm9sZSI6InN0dWRlbnQifX0.4XY0uLGK3qDZx3KcHDXRl0cBfjjmPU5qJ6NGn_nTIeo
+
+  **Success response:**
+    
+    Status Code: 200 OK
+    {
+        "message": "Logout successful."
+    }
+
+  **Error response:**
+    
+  Status Code: **401 Unauthorized`
+    
+    {
+        "message": "Logout failed. Invalid token or server error.",
+        "error": "Signature verification failed"
+    }
+
+  Status Code: `401 Unauthorized`
+  
+    {
+        "message": "Authentication required to log out."
     }
 
 
 ## Implemented Security Measures:
   - Authentication is handled via a centralized login endpoint (/authentication.php).
   - User role-based access via the role field (student, teacher) in the login request.
-  - JSON Payloads only; content-type is explicitly set to application/json.
+  - Password encryption using bcrypt password-hashing function to secure the user's credentials.
+  - Implementation of `JWT Token` to secure the APIs endpoints from unauthorized users.
 
 ## Frontend Application: Student App
 **Purpose**
@@ -571,8 +704,8 @@ This design promotes:
 
 ## Business Logic and Data Validation
 
-### Use Case Diagrams/Flowcharts
-Illustrate the main user flows, such as "selecting a book," "borrowing a book," and "returning a book." This visually demonstrates the business logic.
+### Flowchart of the System
+<img width="331" height="612" alt="image" src="https://github.com/user-attachments/assets/9972bbcc-404e-46ea-a383-496ff6c74bfd" />
 
 ### Data Validation
 Describe the validation rules implemented on both the frontend (e.g., checking for empty fields) and backend (e.g., ensuring an email is unique).

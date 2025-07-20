@@ -1,5 +1,7 @@
 package erms.student;
 
+import erms.backend.AuthService;
+
 import erms.backend.StudentService;
 import erms.backend.TeacherService;
 
@@ -24,10 +26,15 @@ public class StudentCheckEnrolledSubjects extends JPanel {
     private JComboBox<String> subjectFilter;
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> sorter;
+    private final AuthService authService;
+    private final String currentToken;
     private String studentID;
 
-    public StudentCheckEnrolledSubjects(String studentID) {
+    public StudentCheckEnrolledSubjects(String studentID, AuthService service, String token) {
         this.studentID = studentID;
+        this.authService = service;
+        this.currentToken = token;
+        
         setLayout(new BorderLayout(0, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -100,10 +107,9 @@ public class StudentCheckEnrolledSubjects extends JPanel {
             }
         });
         
-
         // View the marks in a newly created google sheets
         exportBtn.addActionListener(e -> {
-            exportBtn.setEnabled(false); // Disable while creating
+            exportBtn.setEnabled(false);
             exportBtn.setText("Generating...");
 
             new Thread(() -> {
@@ -111,14 +117,12 @@ public class StudentCheckEnrolledSubjects extends JPanel {
                 	// Convert tableModel to JSON
                 	JSONArray tableArray = new JSONArray();
 
-                	// ---- Add header row first
                 	JSONArray headerRow = new JSONArray();
                 	for (int col = 0; col < tableModel.getColumnCount(); col++) {
                 	    headerRow.put(tableModel.getColumnName(col));
                 	}
                 	tableArray.put(headerRow);
 
-                	// ---- Add visible (filtered/sorted) rows
                 	for (int viewRow = 0; viewRow < subjectTable.getRowCount(); viewRow++) {
                 	    int modelRow = subjectTable.convertRowIndexToModel(viewRow);
                 	    JSONArray rowArray = new JSONArray();
@@ -129,12 +133,11 @@ public class StudentCheckEnrolledSubjects extends JPanel {
                 	    tableArray.put(rowArray);
                 	}
 
-                	// --- Assign the data to JSONObject
                     JSONObject root = new JSONObject();
                     root.put("table", tableArray);
 
                     // Call export and get the sheet URL
-                    String sheetUrl = StudentService.exportToSheets(root);
+                    String sheetUrl = TeacherService.exportToSheets(root);
 
                     SwingUtilities.invokeLater(() -> {
                         exportBtn.setEnabled(true);
@@ -174,10 +177,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
             subjectFilter.removeAllItems();
             subjectFilter.addItem("All");
             
-            JSONObject requestData = new JSONObject();
-            requestData.put("studentID", this.studentID);
-            
-            JSONArray subjectsDataArray = StudentService.fetchEnrolledSubjects(requestData);
+            JSONArray subjectsDataArray = StudentService.fetchEnrolledSubjects(this.currentToken);
 
             Set<String> subjects = new HashSet<>();
 
@@ -186,9 +186,10 @@ public class StudentCheckEnrolledSubjects extends JPanel {
                 String subjectIDValue = row.getString("subjectID");
                 String subjectName = row.getString("subjectName");
 
+                // Use optInt/optString for safety in case a value is missing
                 Object score = row.has("score") ? row.getInt("score") : "N/A";
                 String grade = row.optString("grade", "N/A");
-                String tID = row.getString("teacherID");
+                String tID = row.optString("teacherID", "N/A");
 
                 tableModel.addRow(new Object[]{subjectIDValue, subjectName, score, grade, tID});
                 subjects.add(subjectIDValue);
@@ -203,7 +204,7 @@ public class StudentCheckEnrolledSubjects extends JPanel {
             
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load marks: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "❌ Failed to load marks: " + e.getMessage());
         }
     }
 }
