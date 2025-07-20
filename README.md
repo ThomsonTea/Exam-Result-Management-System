@@ -66,7 +66,7 @@ password: 12345678 (for all teachers and students)
 
 ---
 ## Project Overview
-The Exam Result Management System is a software application designed to streamline the process of recording, managing, and publishing students’ examination results. It serves as a centralized platform where administrators and teachers can input scores, generate reports, and provide students with secure access to their academic performance.
+The Exam Result Management System is a software application designed to streamline the process of recording, managing, and publishing students’ examination results. It serves as a centralized platform where teachers can input scores, generate reports, and provide students with secure access to their academic performance.
 
 The system aims to reduce manual errors, eliminate paperwork, and improve the efficiency and transparency of result handling. Students can view their results online, while administrators can generate reports and perform data analysis with ease.
 
