@@ -486,7 +486,8 @@ We integrate our software with the Google Sheets API to enable teachers and stud
   
   Header: `Authorization - Bearer<token>`
   
-    Token Example:
+  Token Example:
+    
     eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTMwMTczMzYsImV4cCI6MTc1MzEwMzczNiwiZGF0YSI6eyJ1c2VyaWQiOiJCMDMyMzEwMDAyIiwicm9sZSI6InN0dWRlbnQifX0.hgRECmzGl_ADk8S3G1agXcADP2B_j-k477wwqsVeiv8
 
   **Success response:**
@@ -529,7 +530,8 @@ We integrate our software with the Google Sheets API to enable teachers and stud
   
   Header: `Authorization - Bearer<token>`
   
-    Token Example:
+  Token Example:
+  
     eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTMwMTc2NDMsImV4cCI6MTc1MzEwNDA0MywiZGF0YSI6eyJ1c2VyaWQiOiJCMDMyMzEwMDAyIiwicm9sZSI6InN0dWRlbnQifX0.4XY0uLGK3qDZx3KcHDXRl0cBfjjmPU5qJ6NGn_nTIeo
 
   **Success response:**
