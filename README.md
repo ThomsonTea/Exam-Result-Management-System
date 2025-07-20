@@ -59,7 +59,7 @@ DEVELOPMENT TEAM:
    4.1) Choose the directory where you want the project to stored locally.
 
    4.2) From the imported project folder, find `emrs-api` folder and copy and paste it on your web server's document root. If you use `XAMPP`, you should paste in in the following path:
-   `C:\xampp\htdocs\Exam-Result-Management-System`. 
+   `C:\xampp\htdocs\Exam-Result-Management-System`. Make sure `.htaccess` file is also included. It is recommended to copy and paste the folder via window's file explorer.
 
    4.3) After that, open the `C:\xampp\htdocs\Exam-Result-Management-System\erms-api` path in terminal and run `composer install`. It will install the `firebase/php-jwt` which is the dependency for using `JWT Token`.
    
