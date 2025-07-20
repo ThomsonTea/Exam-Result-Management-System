@@ -76,19 +76,16 @@ We integrate our software with the Google Sheets API to enable teachers and stud
 ## System Architecture
 
 ### High-Level Diagram
-<img width="841" height="661" alt="HighLevelDAD1 drawio" src="https://github.com/user-attachments/assets/fd49d9a4-89f8-4d77-85d5-63763da06f5a" />
+![WhatsApp Image 2025-07-20 at 5 12 59 PM](https://github.com/user-attachments/assets/784b4a89-6b17-4fe7-ad60-65a93c2a52ca)
 
 ## Backend Application
 
 **Technology Stack**
 
-Language - Java
-
-Networking - HttpURLConnection, HttpClient
-
-JSON Processing	- org.json (for JSON parsing)
-
-Web Server - PHP-based backend (API hosted in /erms-api/)
+- Language - Java
+- Networking - HttpURLConnection, HttpClient
+- JSON Processing	- org.json (for JSON parsing)
+- Web Server - PHP-based backend (API hosted in /erms-api/)
 
 ## 1. login(AuthService)
   API endpoint: http://localhost/Exam-Result-Management-System/erms-api//authentication.php
@@ -446,20 +443,17 @@ The Student App is designed for students to view their enrolled subjects, check 
 
 **Technology Stack**
 
-Programming Language - Java
-
-GUI Toolkit - Swing (javax.swing)
-
-JSON Processing - org.json
-
-HTTP Communication - HttpURLConnection from Java Standard Library
-
-Threading - SwingWorker for asynchronous export operations
+- Programming Language - Java
+- GUI Toolkit - Swing (javax.swing)
+- JSON Processing - org.json
+- HTTP Communication - HttpURLConnection from Java Standard Library
+- Threading - SwingWorker for asynchronous export operations
 
 **API Integration**
 
-The frontend communicates with a backend REST API using HttpURLConnection and JSON payloads. Here's how data exchange is handled:
+- The frontend communicates with a backend REST API using HttpURLConnection and JSON payloads.
 
+Here's how data exchange is handled:
 Base API URL: http://localhost/Exam-Result-Management-System/erms-api/
 
 1. Fetch Enrolled Subjects
