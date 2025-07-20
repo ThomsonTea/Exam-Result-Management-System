@@ -476,6 +476,54 @@ Base API URL: http://localhost/Exam-Result-Management-System/erms-api/
 - Endpoint: /Student/export-to-sheets.php
 - Purpose: Export the displayed data (enrolled subjects, scores, grades) to a Google Sheets document.
 
+## Frontend Application: Teacher App
+**Purpose**
+
+The Teacher App is designed for educators to manage and review students' academic performance. This app provides an interactive GUI that ensures accuracy, transparency, and efficiency in managing student assessments. It enables teachers to:
+
+- Enter marks and grades for students.
+
+- Automatically compute grades based on scores.
+
+- Export grades to Google Sheets.
+
+- View and filter submitted marks for review.
+
+**Technology Stack**
+
+- Programming Language - Java
+- GUI Toolkit - Swing (javax.swing)
+- JSON Handling - org.json library
+- Networking - HttpURLConnection from Java Standard Library
+- UI Enhancements - Table sorting, combo boxes, input validation, and real-time grade calculation
+
+**API Integration**
+
+- The frontend communicates with a backend REST API using HttpURLConnection and JSON payloads.
+
+Here's how data exchange is handled:
+Base API URL: http://localhost/Exam-Result-Management-System/erms-api/
+
+1. Fetch Students
+- Method: GET
+- Endpoint: /Teacher/fetch-students.php
+- Purpose: Populate the student dropdown in the mark entry form with all available students.
+
+2. Fetch Subjects Assigned to Teacher
+- Method: POST
+- Endpoint: /Teacher/fetch-subjects.php
+- Purpose: Populate the subject dropdown based on the teacher's assigned subjects.
+
+3. Submit Mark
+- Method: POST
+- Endpoint: /Teacher/submit-mark.php
+- Purpose: Submit a new score and grade for a student in a subject and optionally export it to Google Sheets.
+
+4. Fetch Submitted Marks
+- Method: GET
+- Endpoint: /Teacher/fetch-marks.php?teacherID={teacherID}
+- Purpose: Retrieve a list of all submitted marks for review, filtering, or auditing.
+
 ## Database Design
 
 ### Entity-Relationship Diagram (ERD)
