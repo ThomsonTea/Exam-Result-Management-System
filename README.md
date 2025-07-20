@@ -708,6 +708,26 @@ This design promotes:
 <img width="491" height="900" alt="image" src="https://github.com/user-attachments/assets/1fa8c60e-3fc5-4da8-b553-90a2a86fae27" />
 
 ### Data Validation
-Describe the validation rules implemented on both the frontend (e.g., checking for empty fields) and backend (e.g., ensuring an email is unique).
+1. Score Input Validation
+- The score field only accepts valid numeric input using a regular expression check (\\d{1,3}), ensuring that scores are integers.
+- Invalid or non-numeric inputs automatically prevent grade calculation, encouraging correct input before submission.
+
+2. Auto-Grade Calculation
+- Grades are automatically calculated based on the entered score using predefined grading rules:
+
+A (80-100), B (70–79), C (60–69), D (50–59), E (40–49), F (<40)
+
+This removes the possibility of user error in manual grade entry and enforces consistency across all teachers.
+
+3. Mandatory Field Checks
+- Before submission, the app ensures that all required fields (student, subject, score, and grade) are filled.
+- If any value is missing or invalid (e.g., empty score or grade), an error dialog is displayed prompting the user to correct the input.
+
+4. Dropdown Selection Control
+- Student and subject fields are populated through controlled dropdowns, which eliminates the risk of entering invalid or non-existent IDs.
+- This ensures referential integrity before the mark is submitted to the backend.
+
+5. Submission Constraints
+- On submission, the app warns if the student already has a mark for the selected subject, preventing duplicate or conflicting entries.
 
  
