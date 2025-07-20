@@ -54,10 +54,9 @@ DEVELOPMENT TEAM:
 
    4.2) Right-click the repo in Git Repositories view > Import Projects (to make it show in package explorer)
 5) Run the erms_db.sql file into your database query to clone the dummy data and db structure.
-6) Check the database connection credential to ensure it's correct (database.pgp at directory of erms-api folder)
-7) Change the url of Google sheet apps script into your own (at the file of submit-mark.php under erms-api > Teacher folder), so data will go export into your google sheet , current one is jia jun's google sheet.
-8) All setup completed, now run the MainApp.java as java application (under src > erms package)
-9) You should see the login asking screen, then can proceed.
+6) Check the database connection credential to ensure it's correct (database.pgp at directory of erms-api folder.
+7) All setup completed, now run the MainApp.java as java application (under src > erms package)
+8) You should see the login asking screen, then can proceed.
 
 
 ### Current dummy data for teacher/student login
