@@ -445,6 +445,48 @@ API Integration
 
 ### Explain how the frontend communicates with the backend API.
 
+## Frontend Application: Student App
+Purpose
+The Student App is designed for students to view their enrolled subjects, check marks/grades for individual subjects, and export academic records to Google Sheets. It provides an intuitive, GUI-based interface that allows students to:
+
+- View a list of subjects they are enrolled in.
+
+- Check scores and grades for specific subjects.
+
+- Filter subjects and export records for personal use or future reference.
+
+Technology Stack
+Programming Language - Java
+GUI Toolkit - Swing (javax.swing)
+JSON Processing - org.json
+HTTP Communication - HttpURLConnection from Java Standard Library
+Threading - SwingWorker for asynchronous export operations
+
+API Integration
+The frontend communicates with a backend REST API using HttpURLConnection and JSON payloads. Here's how data exchange is handled:
+
+Base API URL: http://localhost/Exam-Result-Management-System/erms-api/
+
+1. Fetch Enrolled Subjects
+- Method: POST
+- Endpoint: /Student/fetch-enrolled-subjects.php
+- Purpose: Populate the table with subjects the student is enrolled in.
+
+2. Fetch Subjects for Marks View
+- Method: POST
+- Endpoint: /Student/fetch-enrolled-subjects-marks.php
+- Purpose: Populate dropdown menu with subjects for which the student can view marks.
+
+3. Fetch Subject Marks
+- Method: POST
+- Endpoint: /Student/fetch-subject-mark.php
+- Purpose: Retrieve score and grade for a selected subject.
+
+4. Export to Google Sheets
+- Method: POST
+- Endpoint: /Student/export-to-sheets.php
+- Purpose: Export the displayed data (enrolled subjects, scores, grades) to a Google Sheets document.
+
 ## Database Design
 
 ### Entity-Relationship Diagram (ERD)
