@@ -81,9 +81,13 @@ We integrate our software with the Google Sheets API to enable teachers and stud
 ## Backend Application
 
 **Technology Stack**
+
 Language - Java
+
 Networking - HttpURLConnection, HttpClient
+
 JSON Processing	- org.json (for JSON parsing)
+
 Web Server - PHP-based backend (API hosted in /erms-api/)
 
 ## 1. login(AuthService)
