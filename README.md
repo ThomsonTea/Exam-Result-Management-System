@@ -714,10 +714,8 @@ This design promotes:
 
 2. Auto-Grade Calculation
 - Grades are automatically calculated based on the entered score using predefined grading rules:
-
-A (80-100), B (70–79), C (60–69), D (50–59), E (40–49), F (<40)
-
-This removes the possibility of user error in manual grade entry and enforces consistency across all teachers.
+    A (80-100), B (70–79), C (60–69), D (50–59), E (40–49), F (<40)
+- This removes the possibility of user error in manual grade entry and enforces consistency across all teachers.
 
 3. Mandatory Field Checks
 - Before submission, the app ensures that all required fields (student, subject, score, and grade) are filled.
