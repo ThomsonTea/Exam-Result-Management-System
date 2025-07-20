@@ -428,25 +428,10 @@ Web Server - PHP-based backend (API hosted in /erms-api/)
   - Authentication is handled via a centralized login endpoint (/authentication.php).
   - User role-based access via the role field (student, teacher) in the login request.
   - JSON Payloads only; content-type is explicitly set to application/json.
-  
-## Frontend Applications
-
-For each of the two frontend apps:
-
-## Purpose
-
-### Describe the app's function and target user (e.g., one app for customers, one for administrators).
-
-Technology Stack
-
-### List the frameworks and libraries used (e.g., React, Angular, Vue.js, Swift, Kotlin).
-
-API Integration
-
-### Explain how the frontend communicates with the backend API.
 
 ## Frontend Application: Student App
-Purpose
+**Purpose**
+
 The Student App is designed for students to view their enrolled subjects, check marks/grades for individual subjects, and export academic records to Google Sheets. It provides an intuitive, GUI-based interface that allows students to:
 
 - View a list of subjects they are enrolled in.
@@ -455,14 +440,20 @@ The Student App is designed for students to view their enrolled subjects, check 
 
 - Filter subjects and export records for personal use or future reference.
 
-Technology Stack
+**Technology Stack**
+
 Programming Language - Java
+
 GUI Toolkit - Swing (javax.swing)
+
 JSON Processing - org.json
+
 HTTP Communication - HttpURLConnection from Java Standard Library
+
 Threading - SwingWorker for asynchronous export operations
 
-API Integration
+**API Integration**
+
 The frontend communicates with a backend REST API using HttpURLConnection and JSON payloads. Here's how data exchange is handled:
 
 Base API URL: http://localhost/Exam-Result-Management-System/erms-api/
