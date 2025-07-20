@@ -553,6 +553,7 @@ Base API URL: http://localhost/Exam-Result-Management-System/erms-api/
 - Stores actual grade data (score, grade) and supports auditability by identifying the responsible teacher.
 
 **Relationship Design**
+
 The Mark table serves as a junction table, capturing many-to-many relationships:
 
 - A student can be graded in many subjects.
