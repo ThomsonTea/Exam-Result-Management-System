@@ -531,7 +531,42 @@ Base API URL: http://localhost/Exam-Result-Management-System/erms-api/
 
 
 ### Schema Justification 
-Briefly explain why the database was designed this way, highlighting key tables and relationships.
+- The database schema is designed to efficiently support a student exam grading and exam result management system, ensuring data integrity, scalability, and clear relational mapping between key entities.
+
+**Key Tables & Their Roles**
+
+1. Student
+- Stores student-specific data such as studentID, studentName, class, and password.
+- Acts as a parent entity in the grading system, connected to the Mark table via studentID.
+
+2. Teacher
+- Contains teacher details (teacherID, teacherName).
+- Linked to the Mark table to track who assigned or entered a specific mark.
+
+3. Subject
+- Maintains information about academic subjects.
+- Connected to the Mark table through subjectID, enabling subjects to be linked to students and teachers.
+
+4. Mark
+- Central table that records student scores and grades.
+- Has foreign keys referencing the Student, Teacher, and Subject tables.
+- Stores actual grade data (score, grade) and supports auditability by identifying the responsible teacher.
+
+**Relationship Design**
+The Mark table serves as a junction table, capturing many-to-many relationships:
+
+- A student can be graded in many subjects.
+
+- A subject can have marks from many students.
+
+- A teacher can assign marks to many students.
+
+Foreign key constraints are used to enforce referential integrity, ensuring that no mark exists without valid student, subject, and teacher references.
+
+This design promotes:
+- **Clarity** in academic data tracking.
+- **Ease of querying** for reports or analysis.
+- **Separation of concerns**, where data is logically grouped and redundant storage is avoided.
 
 ## Business Logic and Data Validation
 
